@@ -43,6 +43,7 @@ public class StationStates {
                     stationState.setNumBikesAvailableTypesEbike(listStationsJSON.getJSONObject(i).getJSONArray("num_bikes_available_types").getJSONObject(1).getInt("ebike"));
                     stationState.setNumDocksAvailable(listStationsJSON.getJSONObject(i).getInt("num_docks_available"));
                     stationState.setLastReported(listStationsJSON.getJSONObject(i).getInt("last_reported"));
+                    stationState.setTimeStampInformationGot(System.currentTimeMillis());
 
                     listStationStates.add(stationState);
                 } catch (Exception e) {

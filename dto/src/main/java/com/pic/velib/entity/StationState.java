@@ -11,6 +11,7 @@ public class StationState {
     @GeneratedValue
     private long id;
 
+    private long timeStampInformationGot;
     private long stationCode;
     private int numBikesAvailable;
     private int numBikesAvailableTypesMechanical;
@@ -101,17 +102,25 @@ public class StationState {
         this.lastReported = lastReported;
     }
 
-    public boolean isEqualExceptLastReported(StationState stationState)
+    public boolean isEqual(StationState stationState)
     {
-        return (this.isReturning == stationState.isReturning
+        return stationState != null
+                && this.isReturning == stationState.isReturning
                 && this.stationCode == stationState.getStationCode()
                 && this.isInstalled == stationState.getIsInstalled()
                 && this.isRenting == stationState.getIsRenting()
                 && this.numBikesAvailable == stationState.getNumBikesAvailable()
                 && this.numBikesAvailableTypesEbike == stationState.getNumBikesAvailableTypesEbike()
                 && this.numBikesAvailableTypesMechanical == stationState.getNumBikesAvailableTypesMechanical()
-                && this.numDocksAvailable == stationState.getNumDocksAvailable());
+                && this.numDocksAvailable == stationState.getNumDocksAvailable();
 
     }
 
+    public long getTimeStampInformationGot() {
+        return timeStampInformationGot;
+    }
+
+    public void setTimeStampInformationGot(long timeStampInformationGot) {
+        this.timeStampInformationGot = timeStampInformationGot;
+    }
 }

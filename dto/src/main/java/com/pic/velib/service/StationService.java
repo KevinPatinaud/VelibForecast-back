@@ -1,4 +1,4 @@
-package com.pic.velib;
+package com.pic.velib.service;
 
 import com.pic.velib.entity.StationState;
 import com.pic.velib.repository.StationStateRepository;
@@ -12,6 +12,9 @@ public interface StationService {
 
     public List<StationState> findStationStates();
     public List<StationState> findStationStates(long stationCode);
+
+
+    public StationState findLastStationStates(long stationCode) ;
 
     public void saveStrationState(StationState stationState);
 

@@ -2,7 +2,7 @@ package com.pic.velib.web.controller;
 
 import com.pic.service.opendata.StationStates;
 import com.pic.service.opendata.Stations;
-import com.pic.velib.StationService;
+import com.pic.velib.service.StationService;
 import com.pic.velib.entity.Station;
 import com.pic.velib.entity.StationState;
 import org.springframework.web.bind.annotation.CrossOrigin;

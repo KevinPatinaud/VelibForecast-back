@@ -1,7 +1,7 @@
 package com.pic.velib.batch.task;
 
 import com.pic.service.opendata.StationStates;
-import com.pic.velib.StationService;
+import com.pic.velib.service.StationService;
 import com.pic.velib.entity.StationState;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

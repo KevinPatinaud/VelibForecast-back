@@ -2,6 +2,7 @@ package com.pic.velib;
 
 
 import com.pic.velib.entity.StationState;
+import com.pic.velib.service.StationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

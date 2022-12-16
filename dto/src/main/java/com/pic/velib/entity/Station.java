@@ -12,6 +12,7 @@ public class Station {
     @Id
     private long stationCode;
 
+    private long timeStampInformationGot;
     private String name;
 
     private double latitude;
@@ -89,5 +90,13 @@ public class Station {
         if (this.states == null)
             this.states = new ArrayList<StationState>();
         this.states.add(state);
+    }
+
+    public long getTimeStampInformationGot() {
+        return timeStampInformationGot;
+    }
+
+    public void setTimeStampInformationGot(long timeStampInformationGot) {
+        this.timeStampInformationGot = timeStampInformationGot;
     }
 }

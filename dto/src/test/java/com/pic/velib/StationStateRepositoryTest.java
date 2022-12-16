@@ -28,7 +28,7 @@ public class StationStateRepositoryTest {
         StationState s = createStation(123456789);
         stationStateRepository.save(s);
         assertThat(stationStateRepository.findAll()).hasSize(1);
-        assertThat(stationStateRepository.findByStationCodeOrderByLastReportedDesc(123456789).get(0).getStationCode()).isEqualTo(123456789);
+        assertThat(stationStateRepository.findByStationCodeOrderByTimeStampInformationGotDesc(123456789).get(0).getStationCode()).isEqualTo(123456789);
     }
 
 
