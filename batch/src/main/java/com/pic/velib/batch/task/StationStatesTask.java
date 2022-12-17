@@ -1,8 +1,8 @@
 package com.pic.velib.batch.task;
 
-import com.pic.service.opendata.StationStates;
 import com.pic.velib.service.StationService;
 import com.pic.velib.entity.StationState;
+import com.pic.velib.service.opendata.StationStates;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +20,7 @@ public class StationStatesTask {
 
     @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     public void getStations() {
+
         List<StationState> stationStates = StationStates.getCurrentStates();
         for (int i = 0 ; i < stationStates.size(); i++)
         {

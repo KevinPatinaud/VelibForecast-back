@@ -8,7 +8,7 @@
         <version>2.7.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.pic</groupId>
+    <groupId>com.pic.velib</groupId>
     <artifactId>service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>service</name>
@@ -49,13 +49,5 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

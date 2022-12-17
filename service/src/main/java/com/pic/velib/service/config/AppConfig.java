@@ -1,4 +1,4 @@
-package com.pic.service.config;
+package com.pic.velib.service.config;
 
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
