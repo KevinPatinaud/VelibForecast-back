@@ -10,8 +10,7 @@ pipeline {
 
     stage('deployement') {
       steps {
-        sh '''nohup ./mvnw spring-boot:run -pl batch >  /var/SpringServer/log.log &
- '''
+        sh 'nohup sh -c \'./mvnw spring-boot:run -pl batch\' &'
       }
     }
 
