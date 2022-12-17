@@ -1,15 +1,9 @@
 pipeline {
   agent any
   stages {
-    stage('code coverage') {
-      steps {
-        sh 'mvn clean cobertura:cobertura'
-      }
-    }
-
     stage('build') {
       steps {
-        sh 'mvn clean package'
+        sh './mvnw install'
       }
     }
 
