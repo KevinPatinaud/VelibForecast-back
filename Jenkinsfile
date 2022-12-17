@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh 'chmod +x -R ${env.WORKSPACE}'
+        sh 'chmod +x -R ./'
         sh './mvnw install'
       }
     }
