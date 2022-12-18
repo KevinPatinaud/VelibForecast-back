@@ -4,9 +4,9 @@ pipeline {
     stage('clean') {
       steps {
         sh 'echo ${WORKSPACE}'
-        sh 'kill -9 `ps -ef | grep java | grep tomcat | grep -v grep | awk \'{ print $2 }\'` &'
+        sh 'kill -9 `ps -ef | grep "java -jar -Dspring.profiles.active=prod" | grep -v grep | awk \'{ print $2 }\'` &'
         sleep 10
-        sh 'kill -9 `ps -ef | grep java | grep tomcat | grep -v grep | awk \'{ print $2 }\'` &'
+        sh 'kill -9 `ps -ef | grep "java -jar -Dspring.profiles.active=prod" | grep -v grep | awk \'{ print $2 }\'` &'
         sh 'rm -rf /var/SpringServer/log*'
       }
     }
