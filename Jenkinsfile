@@ -1,11 +1,12 @@
 pipeline {
   agent any
   stages {
- stage('clean') {
+    stage('clean') {
       steps {
-        sh 'rm -rf /var/SpringServer/*'
+        sh 'rm -rf /var/SpringServer/log*'
       }
-    }  
+    }
+
     stage('build') {
       steps {
         sh 'chmod +x -R ./'
@@ -29,8 +30,6 @@ pipeline {
 
       }
     }
-
-   
 
   }
 }
