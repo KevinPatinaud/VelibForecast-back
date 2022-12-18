@@ -22,7 +22,7 @@ pipeline {
       parallel {
         stage('start batch') {
           steps {
-            sh 'mv ${WORKSPACE}/target/batch.jar /var/SpringServer/batch.jar'
+            sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
             sh '''java -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar 2 >  /var/SpringServer/log_batch.txt &
 '''
             sh './mvnw spring-boot:run -pl batch -Dspring-boot.run.profiles=prod &'
