@@ -25,5 +25,11 @@ pipeline {
       }
     }
 
+    stage('clean') {
+      steps {
+        sh 'rm -rf /var/SpringServer/*'
+      }
+    }
+
   }
 }
