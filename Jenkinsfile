@@ -4,6 +4,7 @@ pipeline {
     stage('clean') {
       steps {
         sh 'rm -rf /var/SpringServer/log*'
+        sh 'kill -9 `ps -ef | grep java | grep tomcat | grep -v grep | awk \'{ print $2 }\'` &'
       }
     }
 
