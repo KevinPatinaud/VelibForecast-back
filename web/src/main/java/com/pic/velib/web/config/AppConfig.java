@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories("com.pic.velib.repository")
-@ComponentScan(basePackages = {"com.pic.velib.impl"})
+@ComponentScan(basePackages = {"com.pic.velib.service.impl"})
 @EntityScan(basePackages = {"com.pic.velib.entity"})
 public class AppConfig {
 }
