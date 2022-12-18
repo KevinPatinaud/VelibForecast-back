@@ -12,7 +12,7 @@ pipeline {
       parallel {
         stage('start batch') {
           steps {
-            sh './mvnw spring-boot:run -pl batch  >  /var/SpringServer/log_batch.log'
+            sh './mvnw spring-boot:run -pl batch -Dspring.profiles.active=prod > /var/SpringServer/log_batch.log'
           }
         }
 
