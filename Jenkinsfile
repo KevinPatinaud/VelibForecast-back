@@ -5,8 +5,9 @@ pipeline {
       steps {
         sh 'echo ${WORKSPACE}'
         sh 'kill -9 `ps -ef | grep java | grep tomcat | grep -v grep | awk \'{ print $2 }\'` &'
-        sh 'rm -rf /var/SpringServer/log*'
+        sleep 10
         sh 'kill -9 `ps -ef | grep java | grep tomcat | grep -v grep | awk \'{ print $2 }\'` &'
+        sh 'rm -rf /var/SpringServer/log*'
       }
     }
 
