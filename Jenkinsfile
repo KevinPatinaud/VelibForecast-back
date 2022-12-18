@@ -25,13 +25,14 @@ pipeline {
             sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
             sh '''java -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar 2 >  /var/SpringServer/log_batch.txt &
 '''
-            sh './mvnw spring-boot:run -pl batch -Dspring-boot.run.profiles=prod &'
           }
         }
 
         stage('start web') {
           steps {
-            sh './mvnw spring-boot:run -pl web -Dspring-boot.run.profiles=prod &'
+            sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
+            sh '''java -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar 2 >  /var/SpringServer/log_web.txt &
+'''
           }
         }
 
