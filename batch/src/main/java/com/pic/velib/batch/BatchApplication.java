@@ -17,7 +17,7 @@ public class BatchApplication {
 
 
         SpringApplication app = new SpringApplication(BatchApplication.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", "8083"));
+        app.setDefaultProperties(Collections.singletonMap("server.port", "8085"));
         app.run(args);
     }
 
