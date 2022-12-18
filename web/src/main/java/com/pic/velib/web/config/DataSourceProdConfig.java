@@ -15,12 +15,10 @@ public class DataSourceProdConfig {
 
     @Bean
     public DataSource getDataSource() {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-
+        String propertiesFile = "/var/SpringServer/properties.json";
 
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 
-        String propertiesFile = "properties.json";
 
 
         try {
