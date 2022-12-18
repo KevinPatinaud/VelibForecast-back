@@ -18,7 +18,7 @@ pipeline {
 
         stage('start web') {
           steps {
-            sh './mvnw spring-boot:run -pl web -Dspring-boot.run.profiles=prod >  /var/SpringServer/log_web.log'
+            sh 'cd /var/SpringServer && ./mvnw spring-boot:run -pl web -Dspring-boot.run.profiles=prod >  /var/SpringServer/log_web.log'
           }
         }
 
