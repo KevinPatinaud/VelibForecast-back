@@ -10,8 +10,8 @@ pipeline {
 
     stage('deployement') {
       steps {
-        sh '''./mvnw spring-boot:run -pl batch >  /var/SpringServer/log.log
-'''
+        sh 'mv ${WORKSPACE}/batch/target/velib_batch.jar /var/SpringServer/target/velib_batch.jar'
+        sh './mvnw spring-boot:run -pl batch  >  /var/SpringServer/log.log'
       }
     }
 
