@@ -1,11 +1,16 @@
 pipeline {
   agent any
   stages {
- stage('clean') {
+    stage('clean') {
       steps {
-        sh 'rm -rf /var/SpringServer/*'
+        sh 'echo ${WORKSPACE}'
+        sh 'kill -9 `ps -ef | grep "java -jar -Dspring.profiles.active=prod" | grep -v grep | awk \'{ print $2 }\'` &'
+        sleep 10
+        sh 'kill -9 `ps -ef | grep "java -jar -Dspring.profiles.active=prod" | grep -v grep | awk \'{ print $2 }\'` &'
+        sh 'rm -rf /var/SpringServer/log*'
       }
-    }  
+    }
+
     stage('build') {
       steps {
         sh 'chmod +x -R ./'
@@ -17,20 +22,22 @@ pipeline {
       parallel {
         stage('start batch') {
           steps {
-            sh './mvnw spring-boot:run -pl batch -Dspring-boot.run.profiles=prod > /var/SpringServer/log_batch.log'
+            sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
+            sh '''java -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar 2 >  /var/SpringServer/log_batch.txt &
+'''
           }
         }
 
         stage('start web') {
           steps {
-            sh './mvnw spring-boot:run -pl web -Dspring-boot.run.profiles=prod >  /var/SpringServer/log_web.log'
+            sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
+            sh '''java -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar 2 >  /var/SpringServer/log_web.txt &
+'''
           }
         }
 
       }
     }
-
-   
 
   }
 }
