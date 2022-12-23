@@ -30,7 +30,7 @@ pipeline {
         stage('start web') {
           steps {
             sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
-            sh '''cd /var/SpringServer/ && java -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar >  /var/SpringServer/log_web.txt &
+            sh '''java -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar >  /var/SpringServer/log_web.txt &
 '''
           }
         }
