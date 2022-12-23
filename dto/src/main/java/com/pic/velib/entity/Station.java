@@ -12,6 +12,9 @@ public class Station {
     @Id
     private long stationCode;
 
+    @OneToMany(mappedBy="station")
+    private List<StationState> states;
+
     private long timeStampInformationGot;
     private String name;
 
@@ -24,8 +27,6 @@ public class Station {
     private String rentalMethods;
 
 
-    @OneToMany
-    private List<StationState> states;
 
     public long getStationCode() {
         return stationCode;

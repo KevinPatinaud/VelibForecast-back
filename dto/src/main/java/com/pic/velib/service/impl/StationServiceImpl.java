@@ -1,10 +1,15 @@
 package com.pic.velib.service.impl;
 
+import com.pic.velib.entity.Station;
+import com.pic.velib.repository.StationRepository;
 import com.pic.velib.service.StationService;
 import com.pic.velib.entity.StationState;
 import com.pic.velib.repository.StationStateRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -13,11 +18,17 @@ import java.util.stream.StreamSupport;
 public class StationServiceImpl implements StationService {
 
 
-    StationStateRepository stationStateRepository;
+    private final StationStateRepository stationStateRepository;
+    private final StationRepository stationRepository;
 
 
-    protected StationServiceImpl(StationStateRepository stationStateRepository) {
+    private final EntityManager entityManager;
+
+
+    protected StationServiceImpl(StationStateRepository stationStateRepository, StationRepository stationRepository, EntityManager entityManager) {
         this.stationStateRepository = stationStateRepository;
+        this.stationRepository = stationRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -34,20 +45,33 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public List<StationState> findStationStates(long stationCode) {
-        return stationStateRepository.findByStationCodeOrderByTimeStampInformationGotDesc(stationCode);
+        return null; //stationStateRepository.findByStationCodeOrderByTimeStampInformationGotDesc(stationCode);
 
     }
 
     @Override
     public StationState findLastStationStates(long stationCode) {
-        return stationStateRepository.findFirstByStationCodeOrderByTimeStampInformationGotDesc(stationCode);
 
+        List<StationState> res = entityManager.createNativeQuery("SELECT * FROM StationState WHERE stationCode = :idStationCode order by timeStampInformationGot DESC LIMIT 1", StationState.class).setParameter("idStationCode" , stationCode) .getResultList();
+
+        return res.size() > 0 ? res.get(0) : null;
     }
 
-
+    @Override
+    public void saveStation(Station station) {
+        stationRepository.save(station);
+    }
 
     @Override
-    public void saveStrationState(StationState stationState) {
+    public void saveAllStation(List<Station> stations) {
+        stationRepository.saveAll(stations);
+    }
+
+    @Override
+    public void saveStationState(StationState stationState) {
+        Station station = stationRepository.findById(stationState.getStation().getStationCode()).orElse(null);
+        stationState.setStation(station);
+
         stationStateRepository.save(stationState);
     }
 
@@ -58,7 +82,7 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public void updateStationState(StationState stationState) {
-        StationState lastSavedStationState = findLastStationStates(stationState.getStationCode());
+        StationState lastSavedStationState = findLastStationStates(stationState.getStation().getStationCode()); //stationState.getStationCode());
 
         if (!stationState.isEqual(lastSavedStationState)) {
             stationStateRepository.save(stationState);

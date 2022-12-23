@@ -1,5 +1,6 @@
 package com.pic.velib.service.opendata;
 
+import com.pic.velib.entity.Station;
 import com.pic.velib.service.api.Api;
 import com.pic.velib.entity.StationState;
 import org.json.JSONArray;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StationStates {
 
@@ -32,8 +34,10 @@ public class StationStates {
             for (int i = 0; i < listStationsJSON.length(); i++) {
                 try {
                     StationState stationState = new StationState();
+                    Station station = new Station();
+                    station.setStationCode(listStationsJSON.getJSONObject(i).getLong("stationCode"));
 
-                    stationState.setStationCode(listStationsJSON.getJSONObject(i).getLong("stationCode"));
+                   stationState.setStation(station);
                     stationState.setIsInstalled(listStationsJSON.getJSONObject(i).getInt("is_installed") == 1);
                     stationState.setIsRenting(listStationsJSON.getJSONObject(i).getInt("is_renting") == 1);
                     stationState.setIsReturning(listStationsJSON.getJSONObject(i).getInt("is_returning") == 1);

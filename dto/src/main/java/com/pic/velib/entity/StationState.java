@@ -1,8 +1,7 @@
 package com.pic.velib.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 public class StationState {
@@ -11,8 +10,11 @@ public class StationState {
     @GeneratedValue
     private long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stationCode", nullable=false)
+    private Station station;
+
     private long timeStampInformationGot;
-    private long stationCode;
     private int numBikesAvailable;
     private int numBikesAvailableTypesMechanical;
     private int numBikesAvailableTypesEbike;
@@ -27,14 +29,13 @@ public class StationState {
         return id;
     }
 
-    public Long getStationCode() {
-        return stationCode;
+    public Station getStation() {
+        return station;
     }
 
-    public void setStationCode(long stationCode) {
-        this.stationCode = stationCode;
+    public void setStation(Station station) {
+        this.station = station;
     }
-
 
     public int getNumBikesAvailable() {
         return numBikesAvailable;
@@ -106,7 +107,7 @@ public class StationState {
     {
         return stationState != null
                 && this.isReturning == stationState.isReturning
-                && this.stationCode == stationState.getStationCode()
+                && this.station.getStationCode() == stationState.getStation().getStationCode()
                 && this.isInstalled == stationState.getIsInstalled()
                 && this.isRenting == stationState.getIsRenting()
                 && this.numBikesAvailable == stationState.getNumBikesAvailable()

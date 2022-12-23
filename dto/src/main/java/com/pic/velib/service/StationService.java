@@ -1,8 +1,7 @@
 package com.pic.velib.service;
 
+import com.pic.velib.entity.Station;
 import com.pic.velib.entity.StationState;
-import com.pic.velib.repository.StationStateRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -16,7 +15,10 @@ public interface StationService {
 
     public StationState findLastStationStates(long stationCode) ;
 
-    public void saveStrationState(StationState stationState);
+    void saveAllStation(List<Station> stations);
+
+    public void saveStationState(StationState stationState);
+    public void saveStation(Station station);
 
     public void deleteAllStationStates();
 

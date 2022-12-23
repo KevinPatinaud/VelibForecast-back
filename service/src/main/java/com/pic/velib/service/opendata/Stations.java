@@ -33,7 +33,6 @@ public class Stations {
             JSONObject tomJsonObject = new JSONObject(responseAPI);
 
             JSONArray listStationsJSON = tomJsonObject.getJSONObject("data").getJSONArray("stations");
-            listStationsJSON.getJSONObject(0).getString("stationCode");
 
 
             for (int i = 0; i < listStationsJSON.length(); i++) {
@@ -61,7 +60,8 @@ public class Stations {
 
                 for (int iStation = 0; iStation < stations.size(); iStation++) {
                     for (int iState = 0; iState < stationsStates.size(); iState++) {
-                        if (stations.get(iStation).getStationCode() == stationsStates.get(iState).getStationCode()) {
+                        if (stations.get(iStation).getStationCode() == stationsStates.get(iState).getStation().getStationCode() )
+                        {
                             stations.get(iStation).addState(stationsStates.get(iState));
                         }
                     }

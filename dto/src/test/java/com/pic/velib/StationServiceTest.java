@@ -38,7 +38,7 @@ public class StationServiceTest {
         StationState stationState = createStation(465);
         stationState.setNumDocksAvailable(4);
         stationState.setLastReported(1);
-        stationService.saveStrationState(stationState);
+        stationService.saveStationState(stationState);
 
 
         StationState stationStateUpdated = createStation(465);
@@ -57,7 +57,7 @@ public class StationServiceTest {
         StationState stationState = createStation(465);
         stationState.setNumDocksAvailable(4);
         stationState.setLastReported(1);
-        stationService.saveStrationState(stationState);
+        stationService.saveStationState(stationState);
 
 
         StationState stationStateUpdated = createStation(465);
