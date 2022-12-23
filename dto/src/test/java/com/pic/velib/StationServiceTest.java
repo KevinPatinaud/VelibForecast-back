@@ -74,7 +74,6 @@ public class StationServiceTest {
 
     private StationState createStation(long stationCode) {
         StationState s = new StationState();
-        s.setStationCode(stationCode);
         s.setIsInstalled(true);
         s.setIsRenting(true);
         s.setLastReported(132456);
