@@ -27,6 +27,8 @@ pipeline {
               sh 'java -jar -Dspring.profiles.active=prod /var/SpringServer/batch/batch.jar > /var/SpringServer/batch/log_batch.txt &'
             }
 
+            sh '''cp  /var/SpringServer/properties.json /var/SpringServer/batch/properties.json
+'''
           }
         }
 
