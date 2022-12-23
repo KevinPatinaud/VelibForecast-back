@@ -1,5 +1,6 @@
 package com.pic.velib.web.config;
 
+import com.pic.velib.service.properties.Properties;
 import org.json.JSONObject;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -13,41 +14,17 @@ import java.io.*;
 @Profile("prod")
 public class DataSourceProdConfig {
 
+   private final  Properties properties = new Properties();
     @Bean
     public DataSource getDataSource() {
-        String propertiesFile = "/var/SpringServer/properties.json";
 
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 
-
-
-        try {
-            File f = new File(propertiesFile);
-            if (f.exists()) {
-                InputStream is = new FileInputStream(propertiesFile);
-
-                StringBuilder resultStringBuilder = new StringBuilder();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    resultStringBuilder.append(line);
-                }
-
-                String jsonTxt = resultStringBuilder.toString();
-
-                JSONObject json = new JSONObject(jsonTxt);
-
-                dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
-                dataSourceBuilder.url(json.getString("database_url"));
-                dataSourceBuilder.username(json.getString("database_user"));
-                dataSourceBuilder.password(json.getString("database_password"));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
+        dataSourceBuilder.url(properties.getString("database_url"));
+        dataSourceBuilder.username(properties.getString("database_user"));
+        dataSourceBuilder.password(properties.getString("database_password"));
 
         return dataSourceBuilder.build();
     }
-
 }

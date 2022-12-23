@@ -34,10 +34,5 @@ public class VelibController {
         return Stations.getStations();
     }
 
-    @GetMapping("/test")
-    public int test() {
-        stationService.saveStrationState( new StationState());
-        return stationService.findStationStates().size();
-    }
 
 }
