@@ -23,14 +23,14 @@ pipeline {
         stage('start batch') {
           steps {
             sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
-            sh 'java  -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar  2 > /var/SpringServer/log_batch.txt &'
+            sh 'java  -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar &'
           }
         }
 
         stage('start web') {
           steps {
             sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
-            sh 'java -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar  2 > /var/SpringServer/log_web.txt &'
+            sh 'java -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/web.jar &'
           }
         }
 
