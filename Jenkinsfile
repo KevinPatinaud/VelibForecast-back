@@ -22,13 +22,8 @@ pipeline {
       parallel {
         stage('start batch') {
           steps {
-            sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch/batch.jar'
-            dir(path: '/var/SpringServer/batch') {
-              sh 'java -jar -Dspring.profiles.active=prod /var/SpringServer/batch/batch.jar > /var/SpringServer/batch/log_batch.txt &'
-            }
-
-            sh '''cp  /var/SpringServer/properties.json /var/SpringServer/batch/properties.json
-'''
+            sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
+            sh 'java  -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar > /var/SpringServer/log_batch.txt &'
           }
         }
 
