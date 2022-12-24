@@ -19,8 +19,7 @@ pipeline {
       steps {
         sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
         sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
-        sh 'nohup /var/SpringServer/start.sh &'
-        sh 'java -Dhudson.util.ProcessTree.disable=true -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar > /var/SpringServer/log_batch.log &'
+        sh 'java -Dhudson.util.ProcessTree.disable=true -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar'
       }
     }
 
