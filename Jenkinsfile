@@ -18,7 +18,7 @@ pipeline {
     stage('start') {
       steps {
         sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
-        sh 'mv ${WORKSPACE}/batch/target/web.jar /var/SpringServer/web.jar'
+        sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
         sh '/var/SpringServer/start.sh'
       }
     }
