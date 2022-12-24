@@ -16,10 +16,15 @@ pipeline {
     }
 
     stage('start') {
-      steps {
+      steps { 
+        script{
+                withEnv(['JENKINS_NODE_COOKIE =dontkill']) {
         sh 'mv ${WORKSPACE}/batch/target/batch.jar /var/SpringServer/batch.jar'
         sh 'mv ${WORKSPACE}/web/target/web.jar /var/SpringServer/web.jar'
         sh 'java -Dhudson.util.ProcessTree.disable=true -Duser.dir=/var/SpringServer -jar -Dspring.profiles.active=prod /var/SpringServer/batch.jar'
+      
+                }
+        }
       }
     }
 
