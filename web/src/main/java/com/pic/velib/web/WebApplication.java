@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -16,7 +17,8 @@ public class WebApplication {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(WebApplication.class);
 
-        Map defaultProperties = Collections.singletonMap("server.port", "8083");
+        Map defaultProperties = new HashMap<String, String>();
+        defaultProperties.put("server.port", "8083");
         defaultProperties.put("server.ssl.enabled", "true");
         defaultProperties.put("server.ssl.keyAlias", "tomcat");
         defaultProperties.put("server.ssl.key-store", "/etc/letsencrypt/live/velib-forecast.com/keystore.p12");
