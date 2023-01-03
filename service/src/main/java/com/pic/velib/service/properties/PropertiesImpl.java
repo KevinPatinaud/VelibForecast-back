@@ -1,5 +1,6 @@
 package com.pic.velib.service.properties;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class PropertiesImpl implements Properties {
 
     private Map<key, String> props = null;
 
-    private enum key {Database_URL , Database_USER, Database_PASSWORD, Recaptcha_SECRET, Facebook_CLIENT_ID, Facebook_CLIENT_SECRET}
+    private enum key {Database_URL , Database_USER, Database_PASSWORD, Recaptcha_SECRET, Facebook_CLIENT_ID, Facebook_CLIENT_SECRET, SpringApp_defaultProperties}
 
     public PropertiesImpl()
     {
@@ -24,7 +25,7 @@ public class PropertiesImpl implements Properties {
         props.put(key.Recaptcha_SECRET, "recaptcha_secret");
         props.put(key.Facebook_CLIENT_ID, "facebook_client_id");
         props.put(key.Facebook_CLIENT_SECRET, "facebook_client_secret");
-
+        props.put(key.SpringApp_defaultProperties, "SpringApp_defaultProperties");
 
 
         String urlPropertiesFile = System.getProperty("user.dir") + "/properties.json";
@@ -90,5 +91,18 @@ public class PropertiesImpl implements Properties {
     @Override
     public String getFacebookClientSecret() {
         return getString(props.get(key.Facebook_CLIENT_SECRET));
+    }
+
+    @Override
+    public Map getSpringAppDefaultProperties() {
+        try {
+            JSONObject defProps = properties.getJSONObject(props.get(key.SpringApp_defaultProperties));
+            System.out.println(defProps);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return null;
     }
 }
