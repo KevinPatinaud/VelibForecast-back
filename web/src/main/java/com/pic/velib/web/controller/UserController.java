@@ -34,8 +34,6 @@ public class UserController {
     @PostMapping("/MailUser")
     public boolean createMailUser(@RequestBody Map<String, Object> params) {
 
-        // https://www.baeldung.com/spring-security-registration-password-encoding-bcrypt
-
         if (Recaptcha.isValide(params.get("captchaToken").toString())) {
             if ( userService.findUser(params.get("email").toString()).isEmpty() ) {
                 User user = new User();
