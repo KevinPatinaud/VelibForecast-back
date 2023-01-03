@@ -1,11 +1,13 @@
 package com.pic.velib.service.properties;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 @Component
@@ -95,14 +97,28 @@ public class PropertiesImpl implements Properties {
 
     @Override
     public Map getSpringAppDefaultProperties() {
+        Map result = null;
         try {
             JSONObject defProps = properties.getJSONObject(props.get(key.SpringApp_defaultProperties));
             System.out.println(defProps);
+
+            result = new HashMap<String, String>();
+
+            Iterator<String> keys = defProps.keys();
+            while(keys.hasNext()) {
+                String key = keys.next();
+                System.out.println(key);
+
+                System.out.println( defProps.get(key) );
+
+                result.put(key , defProps.get(key));
+
+            }
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
 
-
-        return null;
+        return result;
     }
 }
