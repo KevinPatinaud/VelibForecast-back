@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class FacebookLogin {
-
-
     public static String confirmToken(String token) {
 
         Properties properties = new PropertiesImpl();
