@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class User {
 
-  public  enum AuthenficationType {
+  public enum AuthenficationType {
         FACEBOOK,
         MAIL
     }
@@ -13,7 +13,7 @@ public class User {
     @Id
     private String id;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private AuthenficationType authenficationtype;
 
     private String password;

@@ -1,20 +1,17 @@
 package com.pic.velib.service.recaptcha;
 
-import com.pic.velib.entity.Station;
 import com.pic.velib.service.api.Api;
-import com.pic.velib.service.properties.Properties;
-import org.json.JSONArray;
+import com.pic.velib.service.properties.PropertiesImpl;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class Recaptcha {
 
-    private static final Properties properties = new Properties();
+    @Autowired
+    private static PropertiesImpl properties;
     public static boolean isValide(String captchaToken)
     {
-        String responseAPI = Api.callAPI("https://www.google.com/recaptcha/api/siteverify?secret=" + properties.getString("recaptcha_secret") + "&response=" + captchaToken);
+        String responseAPI = Api.callAPI("https://www.google.com/recaptcha/api/siteverify?secret=" + properties.getRecaptchaSecret() + "&response=" + captchaToken);
 
 
         try {

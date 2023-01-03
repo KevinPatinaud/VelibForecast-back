@@ -28,7 +28,7 @@ public class StationStates {
             JSONObject tomJsonObject = new JSONObject(response);
 
             JSONArray listStationsJSON = tomJsonObject.getJSONObject("data").getJSONArray("stations");
-            listStationsJSON.getJSONObject(0).getString("stationCode");
+
 
 
             for (int i = 0; i < listStationsJSON.length(); i++) {
