@@ -3,6 +3,7 @@ package com.pic.velib.web.controller;
 import com.pic.velib.entity.User;
 import com.pic.velib.service.UserService;
 import com.pic.velib.service.facebook.FacebookLogin;
+import com.pic.velib.service.facebook.FacebookLoginImpl;
 import com.pic.velib.service.recaptcha.Recaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,14 +14,18 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 public class UserController {
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
+    private FacebookLogin fbLogin;
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    @Autowired
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.fbLogin = fbLogin;
     }
 
 
@@ -51,8 +56,7 @@ public class UserController {
     @PostMapping("/FacebookUser")
     public User createFacebookUser(@RequestBody Map<String, Object> params) {
 
-
-        String userIdFacebook = FacebookLogin.confirmToken(params.get("accessToken").toString());
+        String userIdFacebook = fbLogin.confirmToken(params.get("accessToken").toString());
 
         User user = null;
 
