@@ -3,43 +3,29 @@ package com.pic.velib.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
-  public enum AuthenficationType {
-        FACEBOOK,
-        MAIL
-    }
-
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
 
-    @Enumerated(EnumType.STRING)
-    private AuthenficationType authenficationtype;
+    private String name;
 
-    private String password;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public AuthenficationType getAuthenficationType() {
-        return authenficationtype;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setAuthenficationType(AuthenficationType authenficationType) {
-        this.authenficationtype = authenficationType;
-    }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
