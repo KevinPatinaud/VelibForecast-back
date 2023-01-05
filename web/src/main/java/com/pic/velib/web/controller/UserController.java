@@ -1,6 +1,8 @@
 package com.pic.velib.web.controller;
 
 import com.pic.velib.entity.User;
+import com.pic.velib.entity.UserFacebook;
+import com.pic.velib.entity.UserMail;
 import com.pic.velib.service.UserService;
 import com.pic.velib.service.facebook.FacebookLogin;
 import com.pic.velib.service.recaptcha.Recaptcha;
@@ -44,10 +46,9 @@ public class UserController {
 
         if (recaptcha.isValide(params.get("captchaToken").toString())) {
             if ( userService.findUser(params.get("email").toString()).isEmpty() ) {
-                User user = new User();
-                user.setId(params.get("email").toString());
+                UserMail user = new UserMail();
+                user.setMail(params.get("email").toString());
                 user.setPassword(passwordEncoder.encode(params.get("password").toString()));
-                user.setAuthenficationType(User.AuthenficationType.MAIL);
                 userService.saveUser(user);
                 return true;
             }
@@ -57,21 +58,19 @@ public class UserController {
 
 
     @PostMapping("/FacebookUser")
-    public User createFacebookUser(@RequestBody Map<String, Object> params) {
+    public boolean createFacebookUser(@RequestBody Map<String, Object> params) {
 
         String userIdFacebook = fbLogin.confirmToken(params.get("accessToken").toString());
 
-        User user = null;
-
         if ( userService.findUser(userIdFacebook).isEmpty() ) {
             if (userIdFacebook != null) {
-                user = new User();
-                user.setId(userIdFacebook);
-                user.setAuthenficationType(User.AuthenficationType.FACEBOOK);
+                UserFacebook user = new UserFacebook();
+                user.setFacebookId(userIdFacebook);
                 userService.saveUser(user);
+                return true;
             }
         }
-        return user;
+        return false;
     }
 
 }
