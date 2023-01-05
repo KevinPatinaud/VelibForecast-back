@@ -35,9 +35,9 @@ public class UserController {
 
 
     @GetMapping("/MailUserExist")
-    public Boolean isMailUserExist(@RequestParam String id) {
+    public Boolean isMailUserExist(@RequestParam String mail) {
 
-       return  ! userService.findUser(id).isEmpty();
+       return  userService.findUserByMail(mail) != null;
 
     }
 
@@ -45,11 +45,11 @@ public class UserController {
     public boolean createMailUser(@RequestBody Map<String, Object> params) {
 
         if (recaptcha.isValide(params.get("captchaToken").toString())) {
-            if ( userService.findUser(params.get("email").toString()).isEmpty() ) {
+            if ( userService.findUserByMail(params.get("email").toString()) == null ) {
                 UserMail user = new UserMail();
                 user.setMail(params.get("email").toString());
                 user.setPassword(passwordEncoder.encode(params.get("password").toString()));
-                userService.saveUser(user);
+                userService.saveUserMail(user);
                 return true;
             }
         }
@@ -62,11 +62,11 @@ public class UserController {
 
         String userIdFacebook = fbLogin.confirmToken(params.get("accessToken").toString());
 
-        if ( userService.findUser(userIdFacebook).isEmpty() ) {
+        if ( userService.findUserByFacebookID(userIdFacebook) == null ) {
             if (userIdFacebook != null) {
                 UserFacebook user = new UserFacebook();
                 user.setFacebookId(userIdFacebook);
-                userService.saveUser(user);
+                userService.saveUserFacebook(user);
                 return true;
             }
         }
