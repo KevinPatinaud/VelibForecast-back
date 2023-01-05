@@ -1,13 +1,13 @@
 package com.pic.velib.service.properties;
 
+import java.util.Map;
+
 public interface Properties {
     public  String getDatabaseURL();
     public  String getDatabaseUser();
     public  String getDatabasePassword();
     public  String getRecaptchaSecret();
-
-
-    String getFacebookClientID();
-
-    String getFacebookClientSecret();
+    public String getFacebookClientID();
+    public String getFacebookClientSecret();
+    public Map getSpringAppDefaultProperties();
 }

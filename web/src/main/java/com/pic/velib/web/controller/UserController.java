@@ -4,6 +4,7 @@ import com.pic.velib.entity.User;
 import com.pic.velib.service.UserService;
 import com.pic.velib.service.facebook.FacebookLogin;
 import com.pic.velib.service.recaptcha.Recaptcha;
+import com.pic.velib.service.recaptcha.RecaptchaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +14,21 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 public class UserController {
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
+    private FacebookLogin fbLogin;
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private Recaptcha recaptcha;
+
+    @Autowired
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin, Recaptcha recaptcha) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.fbLogin = fbLogin;
+        this.recaptcha = recaptcha;
     }
 
 
@@ -34,7 +42,7 @@ public class UserController {
     @PostMapping("/MailUser")
     public boolean createMailUser(@RequestBody Map<String, Object> params) {
 
-        if (Recaptcha.isValide(params.get("captchaToken").toString())) {
+        if (recaptcha.isValide(params.get("captchaToken").toString())) {
             if ( userService.findUser(params.get("email").toString()).isEmpty() ) {
                 User user = new User();
                 user.setId(params.get("email").toString());
@@ -51,8 +59,7 @@ public class UserController {
     @PostMapping("/FacebookUser")
     public User createFacebookUser(@RequestBody Map<String, Object> params) {
 
-
-        String userIdFacebook = FacebookLogin.confirmToken(params.get("accessToken").toString());
+        String userIdFacebook = fbLogin.confirmToken(params.get("accessToken").toString());
 
         User user = null;
 
