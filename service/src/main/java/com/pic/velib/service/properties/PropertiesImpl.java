@@ -16,10 +16,9 @@ public class PropertiesImpl implements Properties {
 
     private Map<key, String> props = null;
 
-    private enum key {Database_URL , Database_USER, Database_PASSWORD, Recaptcha_SECRET, Facebook_CLIENT_ID, Facebook_CLIENT_SECRET, SpringApp_defaultProperties}
+    private enum key {Database_URL, Database_USER, Database_PASSWORD, Recaptcha_SECRET, Facebook_CLIENT_ID, Facebook_CLIENT_SECRET, SpringApp_defaultProperties}
 
-    public PropertiesImpl()
-    {
+    public PropertiesImpl() {
         props = new HashMap<key, String>();
         props.put(key.Database_URL, "database_url");
         props.put(key.Database_USER, "database_user");
@@ -56,11 +55,10 @@ public class PropertiesImpl implements Properties {
         }
     }
 
-    private String getString(String prop)
-    {
+    private String getString(String prop) {
         try {
             return properties.getString(prop);
-        }catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -100,18 +98,14 @@ public class PropertiesImpl implements Properties {
         Map result = null;
         try {
             JSONObject defProps = properties.getJSONObject(props.get(key.SpringApp_defaultProperties));
-            System.out.println(defProps);
 
             result = new HashMap<String, String>();
 
             Iterator<String> keys = defProps.keys();
-            while(keys.hasNext()) {
+            while (keys.hasNext()) {
                 String key = keys.next();
-                System.out.println(key);
 
-                System.out.println( defProps.get(key) );
-
-                result.put(key , defProps.get(key));
+                result.put(key, defProps.get(key));
 
             }
 
