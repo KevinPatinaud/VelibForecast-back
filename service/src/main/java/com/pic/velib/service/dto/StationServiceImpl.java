@@ -1,15 +1,13 @@
-package com.pic.velib.service.impl;
+package com.pic.velib.service.dto.impl;
 
 import com.pic.velib.entity.Station;
 import com.pic.velib.repository.StationRepository;
-import com.pic.velib.service.StationService;
+import com.pic.velib.service.dto.StationService;
 import com.pic.velib.entity.StationState;
 import com.pic.velib.repository.StationStateRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;

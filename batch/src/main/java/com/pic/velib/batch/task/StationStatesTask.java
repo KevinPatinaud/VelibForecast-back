@@ -1,7 +1,7 @@
 package com.pic.velib.batch.task;
 
 import com.pic.velib.entity.Station;
-import com.pic.velib.service.StationService;
+import com.pic.velib.service.dto.StationService;
 import com.pic.velib.entity.StationState;
 import com.pic.velib.service.opendata.StationStates;
 import com.pic.velib.service.opendata.Stations;
