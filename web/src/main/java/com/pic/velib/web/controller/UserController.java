@@ -1,12 +1,10 @@
 package com.pic.velib.web.controller;
 
-import com.pic.velib.entity.User;
 import com.pic.velib.entity.UserFacebook;
 import com.pic.velib.entity.UserMail;
-import com.pic.velib.service.UserService;
+import com.pic.velib.service.dto.UserService;
 import com.pic.velib.service.facebook.FacebookLogin;
 import com.pic.velib.service.recaptcha.Recaptcha;
-import com.pic.velib.service.recaptcha.RecaptchaImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +32,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/MailUserExist")
+    @GetMapping("/MailUser/exist")
     public Boolean isMailUserExist(@RequestParam String mail) {
 
        return  userService.findUserByMail(mail) != null;
@@ -42,35 +40,20 @@ public class UserController {
     }
 
     @PostMapping("/MailUser")
-    public boolean createMailUser(@RequestBody Map<String, Object> params) {
+    public UserMail createMailUser(@RequestBody Map<String, Object> params) {
 
         if (recaptcha.isValide(params.get("captchaToken").toString())) {
-            if ( userService.findUserByMail(params.get("email").toString()) == null ) {
-                UserMail user = new UserMail();
-                user.setMail(params.get("email").toString());
-                user.setPassword(passwordEncoder.encode(params.get("password").toString()));
-                userService.saveUserMail(user);
-                return true;
-            }
+            return userService.createUserMail(params.get("email").toString() , params.get("password").toString()) ;
         }
-        return false;
+        return null;
     }
 
 
     @PostMapping("/FacebookUser")
-    public boolean createFacebookUser(@RequestBody Map<String, Object> params) {
+    public UserFacebook createFacebookUser(@RequestBody Map<String, Object> params) {
 
-        String userIdFacebook = fbLogin.confirmToken(params.get("accessToken").toString());
+        return userService.createUserFacebook(params.get("accessToken").toString());
 
-        if ( userService.findUserByFacebookID(userIdFacebook) == null ) {
-            if (userIdFacebook != null) {
-                UserFacebook user = new UserFacebook();
-                user.setFacebookId(userIdFacebook);
-                userService.saveUserFacebook(user);
-                return true;
-            }
-        }
-        return false;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.pic.velib.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -12,8 +13,16 @@ public class User {
     @Column(name = "id")
     private int id;
 
-    private String name;
 
+
+    @ManyToMany
+    @JoinTable( name = "T_Users_STATIONS",
+            joinColumns = @JoinColumn( name = "id_user" ),
+            inverseJoinColumns = @JoinColumn( name = "stationCode" ) )
+    private List<Station> favoriteStations;
+
+
+    private String name;
 
     public int getId() {
         return id;
@@ -27,5 +36,11 @@ public class User {
         this.name = name;
     }
 
+    public List<Station> getFavoriteStations() {
+        return favoriteStations;
+    }
 
+    public void setFavoriteStations(List<Station> favoriteStations) {
+        this.favoriteStations = favoriteStations;
+    }
 }

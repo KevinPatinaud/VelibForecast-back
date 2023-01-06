@@ -17,9 +17,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class WebApplication {
-
     private static final PropertiesImpl properties = new PropertiesImpl();
-
 
     public static void main(String[] args) {
 

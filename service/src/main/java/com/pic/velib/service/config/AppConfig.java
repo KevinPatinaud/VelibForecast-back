@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories("com.pic.velib.repository")
-@ComponentScan(basePackages = {"com.pic.velib.service.impl"})
 @EntityScan(basePackages = {"com.pic.velib.entity"})
+@ComponentScan(basePackages = {"com.pic.velib.service.facebook"})
 public class AppConfig {
 }
 

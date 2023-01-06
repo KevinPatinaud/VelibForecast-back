@@ -1,13 +1,7 @@
 package com.pic.velib.web.config;
 
 
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableJpaRepositories("com.pic.velib.repository")
-@ComponentScan(basePackages = {"com.pic.velib.service.impl" , "com.pic.velib.service.facebook", "com.pic.velib.service.recaptcha"})
+@ComponentScan(basePackages = {"com.pic.velib.service.dto", "com.pic.velib.service.facebook", "com.pic.velib.service.recaptcha"})
 @EntityScan(basePackages = {"com.pic.velib.entity"})
 public class AppConfig {
 
