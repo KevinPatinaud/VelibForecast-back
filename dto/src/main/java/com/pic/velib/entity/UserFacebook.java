@@ -7,14 +7,14 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name = "id")
 public class UserFacebook extends User {
 
-    @Column(name = "facebook_id")
-    private String facebookId;
+    @Column(name = "facebookid")
+    private String facebookid;
 
     public String getFacebookId() {
-        return facebookId;
+        return facebookid;
     }
 
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setFacebookId(String facebookid) {
+        this.facebookid = facebookid;
     }
 }

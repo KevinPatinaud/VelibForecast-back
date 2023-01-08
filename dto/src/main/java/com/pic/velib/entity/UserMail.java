@@ -5,11 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name="user_mail")
 @PrimaryKeyJoinColumn(name = "id")
-public class UserMail extends User{
+public class UserMail extends User {
 
     private String mail;
 
