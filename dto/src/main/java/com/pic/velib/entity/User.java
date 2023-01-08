@@ -13,8 +13,6 @@ public class User {
     @Column(name = "id")
     private int id;
 
-
-
     @ManyToMany
     @JoinTable( name = "T_Users_STATIONS",
             joinColumns = @JoinColumn( name = "id_user" ),

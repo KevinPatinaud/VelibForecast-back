@@ -5,24 +5,16 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Calendar;
 
 @Component
-public class JWTUtil {
-    public String generateJWT(int idUser, String secret) throws Exception {
+public class JWTServiceImpl implements JWTService {
+    public String generateJWT(JSONObject payload , String secret) throws Exception {
 
         JSONObject header = new JSONObject();
         header.put("alg", "H256");
         header.put("typ", "JWT");
-
-        JSONObject payload = new JSONObject();
-        payload.put("iduser", idUser);
-
-     //   payload.put("exp",  System.currentTimeMillis() / 1000 + 5 * 60);
-
 
         MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 
