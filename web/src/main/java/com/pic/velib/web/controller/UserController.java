@@ -1,6 +1,6 @@
 package com.pic.velib.web.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pic.velib.entity.Station;
 import com.pic.velib.entity.User;
 import com.pic.velib.entity.UserFacebook;
 import com.pic.velib.entity.UserMail;
@@ -14,6 +14,7 @@ import com.pic.velib.service.recaptcha.Recaptcha;
 import com.pic.velib.web.exception.UserAlreadyExistHTTPException;
 import com.pic.velib.web.exception.UserNotExistHTTPException;
 import com.pic.velib.web.exception.UserWrongPasswordHTTPException;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +37,17 @@ public class UserController {
 
     private Recaptcha recaptcha;
 
-    private JWTService jwt;
+    private JWTService jwtService;
 
     private String jwtSecret;
 
     @Autowired
-    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin, Recaptcha recaptcha, JWTService jwt) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin, Recaptcha recaptcha, JWTService jwtService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.fbLogin = fbLogin;
         this.recaptcha = recaptcha;
-        this.jwt = jwt;
+        this.jwtService = jwtService;
         try {
             jwtSecret = String.valueOf(SecureRandom.getInstanceStrong().nextLong());
         } catch (NoSuchAlgorithmException e) {
@@ -55,14 +56,14 @@ public class UserController {
     }
 
 
-    @GetMapping("/MailUser/exist")
+    @GetMapping("/User/MailUser/exist")
     public Boolean isMailUserExist(@RequestParam String mail) {
 
         return userService.findUserByMail(mail) != null;
 
     }
 
-    @PostMapping("/MailUser")
+    @PostMapping("/User/MailUser")
     public String createMailUser(@RequestBody Map<String, Object> params) {
 
         if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
@@ -79,7 +80,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/MailUser")
+    @PutMapping("/User/MailUser")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
         if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
@@ -95,12 +96,38 @@ public class UserController {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PutMapping("/User/addFavoriteStation")
+    public boolean addFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
+
+        String jwtToken = authorization.replace("Bearer " , "");
+
+        if ( ! jwtService.isValid(jwtToken, jwtSecret) )
+            throw new RuntimeException();
 
 
+        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()) , jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+
+        return true;
+    }
+
+    @PutMapping("/User/removeFavoriteStation")
+    public boolean removeFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
+
+        String jwtToken = authorization.replace("Bearer " , "");
+
+        if ( ! jwtService.isValid(jwtToken, jwtSecret) )
+            throw new RuntimeException();
+
+
+        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()) , jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+
+        return true;
     }
 
 
-    @PostMapping("/FacebookUser")
+    @PostMapping("/User/FacebookUser")
     public String createFacebookUser(@RequestBody Map<String, Object> params) {
 
         try {
@@ -115,7 +142,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/FacebookUser")
+    @PutMapping("/User/FacebookUser")
     public String connectFacebookUser(@RequestBody Map<String, Object> params) {
 
 
@@ -139,17 +166,24 @@ public class UserController {
         JSONObject response = new JSONObject();
 
         JSONObject payload = new JSONObject();
-        payload.put("iduser" , user.getId());
-     //   payload.put("favoriteStations" , user.getFavoriteStations());
+        payload.put("iduser", user.getId());
+
+        JSONArray favoriteStations = new JSONArray();
+
+        for (int i = 0 ; i < user.getFavoriteStations().size(); i++)
+            favoriteStations.put(((Station)user.getFavoriteStations().toArray()[i]).toJSON());
+
+        payload.put("favoriteStations" , favoriteStations);
 
         try {
-            response.put("JWT", jwt.generateJWT(payload, jwtSecret));
+            response.put("JWT", jwtService.generateJWT(payload, jwtSecret));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         return response;
     }
+
 
 
 }

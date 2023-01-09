@@ -10,7 +10,7 @@ import java.util.Base64;
 
 @Component
 public class JWTServiceImpl implements JWTService {
-    public String generateJWT(JSONObject payload , String secret) throws Exception {
+    public String generateJWT(JSONObject payload, String secret) throws Exception {
 
         JSONObject header = new JSONObject();
         header.put("alg", "H256");
@@ -24,15 +24,15 @@ public class JWTServiceImpl implements JWTService {
         return b64.encodeToString(header.toString().getBytes()) + "." +
                 b64.encodeToString(payload.toString().getBytes()) + "." +
                 b64.encodeToString(
-                        sha256.digest( (
+                        sha256.digest((
                                 header.toString() + "." +
-                                payload.toString() + "." +
-                                secret
-                        ).getBytes() ))
+                                        payload.toString() + "." +
+                                        secret
+                        ).getBytes()))
                 ;
     }
 
-    public boolean isValid(String jwtToken, String secret)  {
+    public boolean isValid(String jwtToken, String secret) {
         try {
             String[] data = jwtToken.split("\\.");
 
@@ -44,15 +44,13 @@ public class JWTServiceImpl implements JWTService {
 
 
             return Arrays.equals(sha256.digest((new String(b64.decode(data[0])) + "." + new String(b64.decode(data[1])) + "." + secret).getBytes()), b64.decode(data[2]));
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
 
-    protected JSONObject getPayload(String jwtToken, String secret)
-    {
-        if ( ! isValid(jwtToken, secret) )
+    public JSONObject getPayload(String jwtToken, String secret) {
+        if (!isValid(jwtToken, secret))
             return null;
 
         String[] data = jwtToken.split("\\.");
@@ -60,7 +58,7 @@ public class JWTServiceImpl implements JWTService {
 
         Base64.Decoder b64 = Base64.getUrlDecoder();
         try {
-            return new JSONObject( new String(b64.decode(data[1])) );
+            return new JSONObject(new String(b64.decode(data[1])));
         } catch (JSONException e) {
             return null;
         }
@@ -68,11 +66,4 @@ public class JWTServiceImpl implements JWTService {
     }
 
 
-    public int getIdUser(String jwtToken, String secret)  {
-        try {
-            return getPayload( jwtToken,  secret).getInt("iduser");
-        } catch (JSONException e) {
-            return -1;
-        }
-    }
 }
