@@ -1,22 +1,27 @@
 package com.pic.velib.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @Entity
 @Table(name = "station")
 public class Station {
 
     @Id
+    @Column(name = "station_code")
     private long stationCode;
 
-    @OneToMany(mappedBy="station")
+    @OneToMany(mappedBy = "station")
     private List<StationState> states;
 
+    @Column(name = "timestamp_information_got")
     private long timeStampInformationGot;
     private String name;
 
@@ -26,8 +31,8 @@ public class Station {
 
     private int capacity;
 
+    @Column(name = "rental_methods")
     private String rentalMethods;
-
 
 
     public long getStationCode() {
@@ -90,8 +95,7 @@ public class Station {
     }
 
     public void addState(StationState state) {
-        if (this.states == null)
-            this.states = new ArrayList<StationState>();
+        if (this.states == null) this.states = new ArrayList<StationState>();
         this.states.add(state);
     }
 
@@ -101,5 +105,23 @@ public class Station {
 
     public void setTimeStampInformationGot(long timeStampInformationGot) {
         this.timeStampInformationGot = timeStampInformationGot;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+
+        try {
+            json.put("stationCode", this.stationCode);
+            json.put("timeStampInformationGot", this.timeStampInformationGot);
+            json.put("name", this.name);
+            json.put("latitude", this.latitude);
+            json.put("longitude", this.longitude);
+            json.put("capacity", this.capacity);
+            json.put("rentalMethods", this.rentalMethods);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        return json;
     }
 }

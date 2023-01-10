@@ -15,4 +15,7 @@ public interface UserService {
 
     public UserFacebook findUserByFacebookID(String facebookId);
 
+   public  void addFavoriteStation(long id_station, int id_user) throws UserNotExistException;
+
+    public void removeFavoriteStation(int id_station, int iduser)  throws UserNotExistException;
 }
