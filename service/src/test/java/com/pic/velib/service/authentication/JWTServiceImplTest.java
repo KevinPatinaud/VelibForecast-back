@@ -1,6 +1,7 @@
 package com.pic.velib.service.authentication;
 
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 
@@ -8,19 +9,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class JWTServiceImplTest {
 
-/*
+
     @Test
     public void generateJWT() throws Exception {
         JWTServiceImpl jwt = new JWTServiceImpl();
 
-        assertThat(jwt.generateJWT(123, "secret")).isEqualTo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIMjU2In0.eyJpZHVzZXIiOjEyM30.vkkMG9vRFlrQ10fvq8rNHMTJlnMyaoBfkr-ZDvT2C5g");
+        assertThat(jwt.generateJWT(new JSONObject("{idUser = 123456}"), "secret")).isEqualTo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIMjU2In0.eyJpZFVzZXIiOjEyMzQ1Nn0.Ia9KDU_ZJymPWtmLjWCg3CDb-I127rx9N40noxXiP34");
     }
 
     @Test
     public void isValidJWT() throws Exception {
         JWTServiceImpl jwt = new JWTServiceImpl();
 
-        assertThat(jwt.isValid(jwt.generateJWT(123, "secret"), "secret")).isTrue();
+        assertThat(jwt.isValid(jwt.generateJWT(new JSONObject("{idUser = 123456}"), "secret"), "secret")).isTrue();
     }
 
     @Test
@@ -41,8 +42,9 @@ public class JWTServiceImplTest {
     @Test
     public void getUserId() throws Exception {
         JWTServiceImpl jwt = new JWTServiceImpl();
+        JSONObject toTest = new JSONObject("{idUser = 123456}");
 
-        assertThat(jwt.getIdUser(jwt.generateJWT(123, "secret"), "secret")).isEqualTo(123);
+        assertThat(jwt.getPayload(jwt.generateJWT(toTest, "secret"), "secret").toString() ).isEqualTo(toTest.toString());
     }
-*/
+
 }

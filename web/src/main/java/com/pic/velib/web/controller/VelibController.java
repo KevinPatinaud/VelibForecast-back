@@ -1,13 +1,13 @@
 package com.pic.velib.web.controller;
 
-import com.pic.velib.service.opendata.StationStates;
-import com.pic.velib.service.opendata.Stations;
+import com.pic.velib.service.opendata.StationsAPI;
+import com.pic.velib.service.opendata.StationsAPIImpl;
 import com.pic.velib.service.dto.StationService;
 import com.pic.velib.entity.Station;
 import com.pic.velib.entity.StationState;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -17,21 +17,36 @@ import java.util.List;
 public class VelibController {
 
     private final StationService stationService;
+    private final StationsAPI stationsApi;
 
-    public VelibController(StationService stationService) {
+
+    @Autowired
+    public VelibController(StationService stationService, StationsAPI stationsApi) {
         this.stationService = stationService;
+        this.stationsApi = stationsApi;
     }
 
-
-    @GetMapping("/stationStates")
-    public List<StationState> stationStates() {
-
-        return StationStates.getCurrentStates();
-    }
 
     @GetMapping("/stations")
     public List<Station> stations() {
-        return Stations.getStations();
+        return stationsApi.getStations();
+    }
+
+    @GetMapping("/stations/states")
+    public List<StationState> stationStates() {
+
+        return stationsApi.getCurrentStates();
+    }
+
+
+
+    @GetMapping("/station/{stationCode}/state")
+    public String getStationState(@PathVariable(value="stationCode") long stationCode, @RequestParam(defaultValue = "0") int inMinutes) {
+        try {
+            return stationService.getStationState(stationCode , Math.max( inMinutes , 0)).toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

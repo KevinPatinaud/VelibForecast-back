@@ -11,17 +11,27 @@ public class StationState {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stationCode", nullable=false)
+    @JoinColumn(name = "station_code", nullable=false)
     private Station station;
 
-    private long timeStampInformationGot;
+    @Column(name="timestamp_information_got")
+    private long timestampInformationGot;
+
+    @Column(name="num_bikes_available")
     private int numBikesAvailable;
+    @Column(name="num_bikes_available_types_mechanical")
     private int numBikesAvailableTypesMechanical;
+    @Column(name="num_bikes_available_types_ebike")
     private int numBikesAvailableTypesEbike;
+    @Column(name="num_docks_available")
     private int numDocksAvailable;
+    @Column(name="is_installed")
     private boolean isInstalled;
+    @Column(name="is_returning")
     private boolean isReturning;
+    @Column(name="is_renting")
     private boolean isRenting;
+    @Column(name="last_reported")
     private int lastReported;
 
 
@@ -117,11 +127,11 @@ public class StationState {
 
     }
 
-    public long getTimeStampInformationGot() {
-        return timeStampInformationGot;
+    public long getTimestampInformationGot() {
+        return timestampInformationGot;
     }
 
-    public void setTimeStampInformationGot(long timeStampInformationGot) {
-        this.timeStampInformationGot = timeStampInformationGot;
+    public void setTimestampInformationGot(long timeStampInformationGot) {
+        this.timestampInformationGot = timeStampInformationGot;
     }
 }
