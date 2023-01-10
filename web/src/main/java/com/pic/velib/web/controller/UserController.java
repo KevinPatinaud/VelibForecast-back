@@ -101,13 +101,13 @@ public class UserController {
     @PutMapping("/User/addFavoriteStation")
     public boolean addFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
 
-        String jwtToken = authorization.replace("Bearer " , "");
+        String jwtToken = authorization.replace("Bearer ", "");
 
-        if ( ! jwtService.isValid(jwtToken, jwtSecret) )
+        if (!jwtService.isValid(jwtToken, jwtSecret))
             throw new RuntimeException();
 
 
-        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()) , jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
 
         return true;
     }
@@ -115,13 +115,13 @@ public class UserController {
     @PutMapping("/User/removeFavoriteStation")
     public boolean removeFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
 
-        String jwtToken = authorization.replace("Bearer " , "");
+        String jwtToken = authorization.replace("Bearer ", "");
 
-        if ( ! jwtService.isValid(jwtToken, jwtSecret) )
+        if (!jwtService.isValid(jwtToken, jwtSecret))
             throw new RuntimeException();
 
 
-        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()) , jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
 
         return true;
     }
@@ -170,10 +170,11 @@ public class UserController {
 
         JSONArray favoriteStations = new JSONArray();
 
-        for (int i = 0 ; i < user.getFavoriteStations().size(); i++)
-            favoriteStations.put(((Station)user.getFavoriteStations().toArray()[i]).toJSON());
+        if (user.getFavoriteStations() != null)
+            for (int i = 0; i < user.getFavoriteStations().size(); i++)
+                favoriteStations.put(((Station) user.getFavoriteStations().toArray()[i]).toJSON());
 
-        payload.put("favoriteStations" , favoriteStations);
+        payload.put("favoriteStations", favoriteStations);
 
         try {
             response.put("JWT", jwtService.generateJWT(payload, jwtSecret));
@@ -183,7 +184,6 @@ public class UserController {
 
         return response;
     }
-
 
 
 }
