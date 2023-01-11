@@ -13,10 +13,8 @@ import java.util.Collections;
 public class BatchApplication {
 
     public static void main(String[] args) {
- //       SpringApplication.run(BatchApplication.class, args);
 
         SpringApplication app = new SpringApplication(BatchApplication.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", "8085"));
         app.run(args);
     }
 
