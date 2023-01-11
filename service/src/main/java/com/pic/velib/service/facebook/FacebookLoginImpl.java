@@ -1,10 +1,10 @@
 package com.pic.velib.service.facebook;
 
 import com.pic.velib.service.api.Api;
-import com.pic.velib.service.properties.Properties;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 @ComponentScan(basePackages = {"com.pic.velib.service.properties"})
 public class FacebookLoginImpl implements FacebookLogin{
 
-    private Properties properties;
 
-    @Autowired
-    public FacebookLoginImpl(Properties properties) {
-        this.properties = properties;
-    }
+    @Value("${facebook_client_id}")
+    private String facebook_client_id;
+
+    @Value("${facebook_client_secret}")
+    private String facebook_client_secret;
 
     public String confirmToken(String token) {
 
         String userId = null;
 
-        String responseAPIaccessToken = Api.callAPI("https://graph.facebook.com/oauth/access_token?client_id=" + properties.getFacebookClientID() + "&client_secret=" + properties.getFacebookClientSecret() + "&grant_type=client_credentials");
+        String responseAPIaccessToken = Api.callAPI("https://graph.facebook.com/oauth/access_token?client_id=" + facebook_client_id+ "&client_secret=" + facebook_client_secret+ "&grant_type=client_credentials");
 
         System.out.println(responseAPIaccessToken);
 
