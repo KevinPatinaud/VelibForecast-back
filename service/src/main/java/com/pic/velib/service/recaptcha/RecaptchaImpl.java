@@ -23,7 +23,6 @@ public class RecaptchaImpl implements Recaptcha{
             JSONObject tomJsonObject = new JSONObject(responseAPI);
             boolean success = tomJsonObject.getBoolean("success");
 
-            System.out.println(success);
             return success;
 
         }catch(Exception e) { }
