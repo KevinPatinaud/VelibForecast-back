@@ -38,7 +38,6 @@ public class StationStatesTask {
             stationService.updateStationState(stationStates.get(i));
         }
 
-        System.out.println(stationService.findStationStates().size());
     }
 
 

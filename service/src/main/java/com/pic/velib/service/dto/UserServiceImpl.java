@@ -95,9 +95,6 @@ public class UserServiceImpl implements UserService {
 
         if (userDB == null) throw new UserNotExistException();
 
-        System.out.println(password);
-        System.out.println(userDB.getPassword());
-        System.out.println(passwordEncoder.encode(password));
 
         if (passwordEncoder.matches(password, userDB.getPassword())) return userDB;
 
