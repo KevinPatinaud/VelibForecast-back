@@ -25,16 +25,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Map;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@CrossOrigin
+@RequestMapping("/api/user")
 public class UserController {
 
-    private PasswordEncoder passwordEncoder;
-
-    private FacebookLogin fbLogin;
-
     private final UserService userService;
-
+    private PasswordEncoder passwordEncoder;
+    private FacebookLogin fbLogin;
     private Recaptcha recaptcha;
 
     private JWTService jwtService;
@@ -56,14 +54,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/User/MailUser/exist")
-    public Boolean isMailUserExist(@RequestParam String mail) {
-
-        return userService.findUserByMail(mail) != null;
-
-    }
-
-    @PostMapping("/User/MailUser")
+    @PostMapping("/mailuser")
     public String createMailUser(@RequestBody Map<String, Object> params) {
 
         if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
@@ -80,7 +71,16 @@ public class UserController {
 
     }
 
-    @PutMapping("/User/MailUser")
+    @GetMapping("/ismailalreadyrecorded")
+    public boolean isMailUserExist(@RequestParam String mail) {
+
+
+        return userService.findUserByMail(mail) != null;
+
+    }
+
+
+    @PutMapping("/mailuser")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
         if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
@@ -98,13 +98,12 @@ public class UserController {
         }
     }
 
-    @PutMapping("/User/addFavoriteStation")
+    @PutMapping("/addfavoritestation")
     public boolean addFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
 
         String jwtToken = authorization.replace("Bearer ", "");
 
-        if (!jwtService.isValid(jwtToken, jwtSecret))
-            throw new RuntimeException();
+        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
 
 
         userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
@@ -112,13 +111,12 @@ public class UserController {
         return true;
     }
 
-    @PutMapping("/User/removeFavoriteStation")
+    @PutMapping("/removefavoritestation")
     public boolean removeFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
 
         String jwtToken = authorization.replace("Bearer ", "");
 
-        if (!jwtService.isValid(jwtToken, jwtSecret))
-            throw new RuntimeException();
+        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
 
 
         userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
@@ -127,7 +125,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/User/FacebookUser")
+    @PostMapping("/facebookuser")
     public String createFacebookUser(@RequestBody Map<String, Object> params) {
 
         try {
@@ -142,7 +140,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/User/FacebookUser")
+    @PutMapping("/facebookuser")
     public String connectFacebookUser(@RequestBody Map<String, Object> params) {
 
 
@@ -170,9 +168,8 @@ public class UserController {
 
         JSONArray favoriteStations = new JSONArray();
 
-        if (user.getFavoriteStations() != null)
-            for (int i = 0; i < user.getFavoriteStations().size(); i++)
-                favoriteStations.put(((Station) user.getFavoriteStations().toArray()[i]).toJSON());
+        if (user.getFavoriteStations() != null) for (int i = 0; i < user.getFavoriteStations().size(); i++)
+            favoriteStations.put(((Station) user.getFavoriteStations().toArray()[i]).toJSON());
 
         payload.put("favoriteStations", favoriteStations);
 

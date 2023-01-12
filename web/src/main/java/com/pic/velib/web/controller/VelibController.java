@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@CrossOrigin
+@RequestMapping("/api/station")
 public class VelibController {
 
     private final StationService stationService;
@@ -27,12 +28,12 @@ public class VelibController {
     }
 
 
-    @GetMapping("/stations")
+    @GetMapping("/")
     public List<Station> stations() {
         return stationsApi.getStations();
     }
 
-    @GetMapping("/stations/states")
+    @GetMapping("/states")
     public List<StationState> stationStates() {
 
         return stationsApi.getCurrentStates();
@@ -40,7 +41,7 @@ public class VelibController {
 
 
 
-    @GetMapping("/station/{stationCode}/state")
+    @GetMapping("/{stationCode}/state")
     public String getStationState(@PathVariable(value="stationCode") long stationCode, @RequestParam(defaultValue = "0") int inMinutes) {
         try {
             return stationService.getStationState(stationCode , Math.max( inMinutes , 0)).toString();
