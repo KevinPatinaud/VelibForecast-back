@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +59,7 @@ public class UserController {
     @PostMapping("/mailuser")
     public String createMailUser(@RequestBody Map<String, Object> params) {
 
-        if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
+    //    if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
 
 
         try {
@@ -81,6 +83,7 @@ public class UserController {
 
 
     @PutMapping("/mailuser")
+    @Secured("ROLE_USER")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
         if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
@@ -96,32 +99,6 @@ public class UserController {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @PutMapping("/addfavoritestation")
-    public boolean addFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
-
-        String jwtToken = authorization.replace("Bearer ", "");
-
-        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
-
-
-        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
-
-        return true;
-    }
-
-    @PutMapping("/removefavoritestation")
-    public boolean removeFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
-
-        String jwtToken = authorization.replace("Bearer ", "");
-
-        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
-
-
-        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
-
-        return true;
     }
 
 
@@ -155,6 +132,36 @@ public class UserController {
 
 
     }
+
+
+    @PutMapping("/addfavoritestation")
+    @Secured("ROLE_USER")
+    public boolean addFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
+
+        String jwtToken = authorization.replace("Bearer ", "");
+
+        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
+
+
+        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+
+        return true;
+    }
+
+    @PutMapping("/removefavoritestation")
+    @Secured("ROLE_USER")
+    public boolean removeFavoriteStation(@RequestHeader("Authorization") String authorization, @RequestBody Map<String, Object> params) throws Exception {
+
+        String jwtToken = authorization.replace("Bearer ", "");
+
+        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
+
+
+        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), jwtService.getPayload(jwtToken, jwtSecret).getInt("iduser"));
+
+        return true;
+    }
+
 
 
     private JSONObject generateResponseUserConnected(User user) throws JSONException {

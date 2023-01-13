@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
 
         UserMail user = new UserMail();
         user.setMail(email);
+        user.setUsername(email);
         user.setPassword(passwordEncoder.encode(password));
         return userMailRepository.save(user);
     }
