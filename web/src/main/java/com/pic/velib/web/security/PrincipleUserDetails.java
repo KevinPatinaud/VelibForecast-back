@@ -5,12 +5,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
-public class VelibUserDetails implements UserDetails {
+public class PrincipleUserDetails implements UserDetails {
     private User user;
 
-    public VelibUserDetails(User user) {
+    private ArrayList<String> authorities = new ArrayList<>();
+
+    public PrincipleUserDetails(User user) {
         this.user = user;
     }
 
@@ -24,7 +27,19 @@ public class VelibUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_USER");
+        String[] autho = new String [authorities.size()];
+
+        for (int i = 0 ; i < authorities.size() ; i++)
+        {
+            autho[i] = authorities.get(i);
+        }
+
+        return AuthorityUtils.createAuthorityList(autho );
+    }
+
+    public void addAuthorities(String authority)
+    {
+        authorities.add(authority);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserFacebook connectUserFacebook(String accessToken) throws UserNotExistException {
+    public UserFacebook getUserFacebook(String accessToken) throws UserNotExistException {
 
         String userIdFacebook = fbLogin.confirmToken(accessToken.toString());
 
@@ -97,9 +97,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public  void addFavoriteStation(int id_station, UUID id_user) throws UserNotExistException{
-        System.out.println(id_user);
+
         Optional<User> userBDD = userRepository.findById(id_user);
-        System.out.println(userBDD);
 
         if (!userBDD.isPresent()) throw new UserNotExistException();
 

@@ -13,7 +13,7 @@ public interface UserService {
 
     UserMail createUserMail(String email, String password) throws UserAlreadyExistException;
 
-    UserFacebook connectUserFacebook(String accessToken) throws UserNotExistException;
+    UserFacebook getUserFacebook(String accessToken) throws UserNotExistException;
 
     UserMail getUserMail(String mail);
 
