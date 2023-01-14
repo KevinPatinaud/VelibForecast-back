@@ -11,7 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 public class User {
 
     @Id
-    @javax.persistence.GeneratedValue
+    @GeneratedValue
     UUID id;
 
     @Column(name = "username", unique = true)

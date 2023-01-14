@@ -7,10 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class MyUserPrincipal implements UserDetails {
+public class VelibUserDetails implements UserDetails {
     private User user;
 
-    public MyUserPrincipal(User user) {
+    public VelibUserDetails(User user) {
         this.user = user;
     }
 
@@ -24,7 +24,6 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        System.out.println("set USER role");
         return AuthorityUtils.createAuthorityList("ROLE_USER");
     }
 
