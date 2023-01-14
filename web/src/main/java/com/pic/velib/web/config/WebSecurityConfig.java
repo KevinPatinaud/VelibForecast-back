@@ -1,6 +1,7 @@
 package com.pic.velib.web.config;
 
 
+import com.pic.velib.web.security.AuthFacebookFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,20 +13,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig {
 
     private UserDetailsService userDetailsService;
 
+    private AuthFacebookFilter authFacebookFilter;
     private PasswordEncoder encoder;
 
     @Autowired
-    WebSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder encoder) {
+    WebSecurityConfig(UserDetailsService userDetailsService, AuthFacebookFilter authFacebookFilter, PasswordEncoder encoder) {
         this.userDetailsService = userDetailsService;
+        this.authFacebookFilter = authFacebookFilter;
         this.encoder = encoder;
     }
 
@@ -40,21 +44,25 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter{
     }
 
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/station/*").permitAll()
+                .antMatchers("/api/station/**/state").permitAll()
                 .antMatchers( "/api/user/ismailalreadyrecorded").permitAll()
                 .antMatchers( HttpMethod.POST,"/api/user/facebookuser").permitAll()
-                .antMatchers( HttpMethod.PUT,"/api/user/facebookuser").permitAll()
+                .antMatchers( HttpMethod.PUT,"/api/user/facebookuser").hasRole("USER_FACEBOOK")
                 .antMatchers( "/api/user/addfavoritestation").permitAll()
                 .antMatchers( "/api/user/removefavoritestation").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/user/mailuser").permitAll()
-                .antMatchers(HttpMethod.PUT,"/api/user/mailuser").hasRole("USER").and().httpBasic();
+                .antMatchers(HttpMethod.PUT,"/api/user/mailuser").hasRole("USER_MAIL").and().httpBasic();
 
         http.authenticationProvider(authenticationProvider());
+
+       http.addFilterAfter(authFacebookFilter, BasicAuthenticationFilter.class);
 
         return http.build();
     }
