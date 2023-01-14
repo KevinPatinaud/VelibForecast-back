@@ -3,6 +3,9 @@ package com.pic.velib.entity;
 import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity(name = "users")
@@ -11,7 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "uuid4")
+    @GenericGenerator(name = "UUID", strategy = "uuid4")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(columnDefinition = "CHAR(36)")
     UUID id;
 
     @Column(name = "username", unique = true)

@@ -6,16 +6,21 @@ import com.pic.velib.service.dto.exception.UserAlreadyExistException;
 import com.pic.velib.service.dto.exception.UserNotExistException;
 import com.pic.velib.service.dto.exception.UserWrongPasswordException;
 
+import java.util.UUID;
+
 public interface UserService {
-    public UserFacebook createUserFacebook(String accessToken) throws UserAlreadyExistException;
-    public UserMail createUserMail(String email , String password) throws UserAlreadyExistException;
-    public UserFacebook connectUserFacebook(String accessToken) throws UserNotExistException;
-    public UserMail connectUserMail(String email , String password) throws UserNotExistException, UserWrongPasswordException;
-    public UserMail findUserByMail(String mail);
+    UserFacebook createUserFacebook(String accessToken) throws UserAlreadyExistException;
 
-    public UserFacebook findUserByFacebookID(String facebookId);
+    UserMail createUserMail(String email, String password) throws UserAlreadyExistException;
 
-   public  void addFavoriteStation(long id_station, int id_user) throws UserNotExistException;
+    UserFacebook connectUserFacebook(String accessToken) throws UserNotExistException;
 
-    public void removeFavoriteStation(int id_station, int iduser)  throws UserNotExistException;
+    UserMail getUserMail(String mail);
+
+    UserFacebook findUserByFacebookID(String facebookId);
+
+    void addFavoriteStation(int id_station, UUID id_user) throws UserNotExistException;
+
+
+    void removeFavoriteStation(int id_station, UUID id_user) throws UserNotExistException;
 }
