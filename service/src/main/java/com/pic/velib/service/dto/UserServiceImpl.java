@@ -10,17 +10,13 @@ import com.pic.velib.repository.UserMailRepository;
 import com.pic.velib.repository.UserRepository;
 import com.pic.velib.service.dto.exception.UserAlreadyExistException;
 import com.pic.velib.service.dto.exception.UserNotExistException;
-import com.pic.velib.service.dto.exception.UserWrongPasswordException;
 import com.pic.velib.service.facebook.FacebookLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @ComponentScan(basePackages = {"com.pic.velib.service.facebook"})
@@ -34,7 +30,6 @@ public class UserServiceImpl implements UserService {
     UserMailRepository userMailRepository;
 
     StationRepository stationRepository;
-
 
     private PasswordEncoder passwordEncoder;
 
@@ -80,30 +75,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserMail createUserMail(String email, String password) throws UserAlreadyExistException {
-        if (findUserByMail(email) != null) throw new UserAlreadyExistException();
+        if (getUserMail(email) != null) throw new UserAlreadyExistException();
 
         UserMail user = new UserMail();
         user.setMail(email);
+        user.setUsername(email);
         user.setPassword(passwordEncoder.encode(password));
         return userMailRepository.save(user);
     }
 
-    @Override
-    public UserMail connectUserMail(String email, String password) throws UserNotExistException, UserWrongPasswordException {
-
-        UserMail userDB = findUserByMail(email);
-
-        if (userDB == null) throw new UserNotExistException();
-
-
-        if (passwordEncoder.matches(password, userDB.getPassword())) return userDB;
-
-        throw new UserWrongPasswordException();
-
-    }
 
     @Override
-    public UserMail findUserByMail(String mail) {
+    public UserMail getUserMail(String mail) {
         return userMailRepository.findByMail(mail);
     }
 
@@ -113,8 +96,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addFavoriteStation(long id_station, int id_user) throws UserNotExistException {
+    public  void addFavoriteStation(int id_station, UUID id_user) throws UserNotExistException{
+        System.out.println(id_user);
         Optional<User> userBDD = userRepository.findById(id_user);
+        System.out.println(userBDD);
 
         if (!userBDD.isPresent()) throw new UserNotExistException();
 
@@ -132,8 +117,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeFavoriteStation(int id_station, int iduser) throws UserNotExistException {
-        Optional<User> userBDD = userRepository.findById(iduser);
+    public void removeFavoriteStation(int id_station, UUID id_user) throws UserNotExistException {
+        Optional<User> userBDD = userRepository.findById(id_user);
 
         if (!userBDD.isPresent()) throw new UserNotExistException();
 

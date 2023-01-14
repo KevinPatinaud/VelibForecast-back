@@ -2,36 +2,72 @@ package com.pic.velib.entity;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
-@Entity
-@Table(name = "user")
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+
+@Entity(name = "users")
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    @GeneratedValue(generator = "uuid4")
+    @GenericGenerator(name = "UUID", strategy = "uuid4")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(columnDefinition = "CHAR(36)")
+    UUID id;
+
+    @Column(name = "username", unique = true)
+    String username;
+
+    String password;
+
+    Boolean enabled = true;
 
     @ManyToMany
-    @JoinTable( name = "users_stations",
-            joinColumns = @JoinColumn( name = "id_user" ),
-            inverseJoinColumns = @JoinColumn( name = "station_code" ) )
+    @JoinTable(name = "users_stations",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "station_code"))
     private Set<Station> favoriteStations;
 
 
-    private String name;
+    public User() {
 
-    public int getId() {
+    }
+
+    public UUID getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Set<Station> getFavoriteStations() {
