@@ -85,7 +85,7 @@ public class UserController {
     @PutMapping("/mailuser")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
-        if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
+     //   if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
 
         try {
             UserMail user = userService.getUserMail(params.get("email").toString());
@@ -112,11 +112,10 @@ public class UserController {
 
 
     @PutMapping("/facebookuser")
-    public String connectFacebookUser(@RequestBody Map<String, Object> params) {
-
+    public String connectFacebookUser(@RequestHeader("facebook_access_token") String facebook_access_token) {
 
         try {
-            UserFacebook user = userService.connectUserFacebook(params.get("accessToken").toString());
+            UserFacebook user = userService.getUserFacebook(facebook_access_token);
             return generateResponseUserConnected(user).toString();
         } catch (UserNotExistException e) {
             throw new UserNotExistHTTPException(e);
@@ -146,8 +145,6 @@ public class UserController {
         String jwtToken = authorization.replace("Bearer ", "");
 
         if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
-
-
 
 
         userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), UUID.fromString( jwtService.getPayload(jwtToken, jwtSecret).getString("iduser") ));
