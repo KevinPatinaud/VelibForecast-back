@@ -1,2 +1,0 @@
-depuis le rep racine : velibForecast-back
- mvn install -pl batch -am
