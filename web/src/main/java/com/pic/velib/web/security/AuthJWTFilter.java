@@ -1,15 +1,13 @@
 package com.pic.velib.web.security;
 
 import com.pic.velib.entity.User;
-import com.pic.velib.repository.UserRepository;
 import com.pic.velib.service.dto.UserService;
-import com.pic.velib.service.dto.exception.UserNotExistException;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -17,45 +15,61 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
-@Service
-public class AuthFacebookFilter extends OncePerRequestFilter {
+@Component
+public class AuthJWTFilter extends OncePerRequestFilter {
 
+    private UserService userService;
 
-   private UserService userService;
+    private JWTUtils jwtUtils;
 
     @Autowired
-    public AuthFacebookFilter(UserService userService) {
+    public AuthJWTFilter(UserService userService, JWTUtils jwtUtils) {
         this.userService = userService;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String facebook_access_token = request.getHeader("facebook_access_token");
+        String jwt = parseJwt(request);
 
-        if (facebook_access_token != null && !facebook_access_token.isEmpty()) {
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 
             try {
-                User user = userService.getUserFacebook(facebook_access_token);
 
-                if (user == null) return;
+                User user = userService.getUserById(UUID.fromString(jwtUtils.getPayload(jwt).getString("iduser")));
+
 
                 PrincipleUserDetails principleUser = new PrincipleUserDetails(user);
                 principleUser.addAuthorities("ROLE_USER");
-                principleUser.addAuthorities("ROLE_USER_FACEBOOK");
 
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(principleUser, null, principleUser.getAuthorities());
                 authentication.setDetails(principleUser);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            } catch (Exception e) {
-                logger.error("Cannot set user authentication: {}", e);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
+
+
         }
 
         filterChain.doFilter(request, response);
     }
+
+
+    private String parseJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7, headerAuth.length());
+        }
+
+        return null;
+    }
 }
+
+

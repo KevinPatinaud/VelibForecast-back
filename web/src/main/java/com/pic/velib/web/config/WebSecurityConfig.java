@@ -2,6 +2,7 @@ package com.pic.velib.web.config;
 
 
 import com.pic.velib.web.security.AuthFacebookFilter;
+import com.pic.velib.web.security.AuthJWTFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,12 +25,15 @@ public class WebSecurityConfig {
     private UserDetailsService userDetailsService;
 
     private AuthFacebookFilter authFacebookFilter;
+
+    private AuthJWTFilter authJWTFilter;
     private PasswordEncoder encoder;
 
     @Autowired
-    WebSecurityConfig(UserDetailsService userDetailsService, AuthFacebookFilter authFacebookFilter, PasswordEncoder encoder) {
+    WebSecurityConfig(UserDetailsService userDetailsService, AuthFacebookFilter authFacebookFilter, AuthJWTFilter authJWTFilter, PasswordEncoder encoder) {
         this.userDetailsService = userDetailsService;
         this.authFacebookFilter = authFacebookFilter;
+        this.authJWTFilter = authJWTFilter;
         this.encoder = encoder;
     }
 
@@ -50,19 +54,19 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/station/*").permitAll()
-                .antMatchers("/api/station/**/state").permitAll()
+                .antMatchers("/api/station/**").permitAll()
                 .antMatchers( "/api/user/ismailalreadyrecorded").permitAll()
                 .antMatchers( HttpMethod.POST,"/api/user/facebookuser").permitAll()
                 .antMatchers( HttpMethod.PUT,"/api/user/facebookuser").hasRole("USER_FACEBOOK")
-                .antMatchers( "/api/user/addfavoritestation").permitAll()
-                .antMatchers( "/api/user/removefavoritestation").permitAll()
+                .antMatchers( "/api/user/addfavoritestation").hasRole("USER" )
+                .antMatchers( "/api/user/removefavoritestation").hasRole("USER" )
                 .antMatchers(HttpMethod.POST, "/api/user/mailuser").permitAll()
                 .antMatchers(HttpMethod.PUT,"/api/user/mailuser").hasRole("USER_MAIL").and().httpBasic();
 
         http.authenticationProvider(authenticationProvider());
 
        http.addFilterAfter(authFacebookFilter, BasicAuthenticationFilter.class);
+       http.addFilterAfter(authJWTFilter,AuthFacebookFilter.class);
 
         return http.build();
     }
