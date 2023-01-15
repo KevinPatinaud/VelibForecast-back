@@ -27,6 +27,7 @@ public class VelibUserDetailsService implements UserDetailsService {
         }
 
         PrincipleUserDetails ppUser = new PrincipleUserDetails(user);
+        ppUser.addAuthorities("ROLE_USER");
         ppUser.addAuthorities("ROLE_USER_MAIL");
 
         return ppUser;

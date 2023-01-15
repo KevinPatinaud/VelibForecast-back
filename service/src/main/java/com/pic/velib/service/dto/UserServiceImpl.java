@@ -44,6 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).get();
+    }
+
+    @Override
     public UserFacebook createUserFacebook(String accessToken) throws UserAlreadyExistException {
 
         String userIdFacebook = fbLogin.confirmToken(accessToken.toString());
@@ -96,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public  void addFavoriteStation(int id_station, UUID id_user) throws UserNotExistException{
+    public void addFavoriteStation(int id_station, UUID id_user) throws UserNotExistException {
 
         Optional<User> userBDD = userRepository.findById(id_user);
 
@@ -124,11 +129,10 @@ public class UserServiceImpl implements UserService {
         User user = userBDD.get();
 
         Set<Station> stations = user.getFavoriteStations();
-        Set<Station> stationsResult  = new HashSet<Station>();
+        Set<Station> stationsResult = new HashSet<Station>();
 
-        for(Station station : stations)
-            if ( station.getStationCode() != id_station )
-                stationsResult.add(station);
+        for (Station station : stations)
+            if (station.getStationCode() != id_station) stationsResult.add(station);
 
 
         user.setFavoriteStations(stationsResult);

@@ -4,27 +4,21 @@ import com.pic.velib.entity.Station;
 import com.pic.velib.entity.User;
 import com.pic.velib.entity.UserFacebook;
 import com.pic.velib.entity.UserMail;
-import com.pic.velib.service.authentication.JWTService;
 import com.pic.velib.service.dto.exception.UserAlreadyExistException;
 import com.pic.velib.service.dto.exception.UserNotExistException;
 import com.pic.velib.service.dto.UserService;
-import com.pic.velib.service.dto.exception.UserWrongPasswordException;
 import com.pic.velib.service.facebook.FacebookLogin;
 import com.pic.velib.service.recaptcha.Recaptcha;
 import com.pic.velib.web.exception.UserAlreadyExistHTTPException;
 import com.pic.velib.web.exception.UserNotExistHTTPException;
-import com.pic.velib.web.exception.UserWrongPasswordHTTPException;
+import com.pic.velib.web.security.JWTUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,22 +32,18 @@ public class UserController {
     private FacebookLogin fbLogin;
     private Recaptcha recaptcha;
 
-    private JWTService jwtService;
+    private JWTUtils jwtUtils;
 
     private String jwtSecret;
 
     @Autowired
-    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin, Recaptcha recaptcha, JWTService jwtService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, FacebookLogin fbLogin, Recaptcha recaptcha, JWTUtils jwtUtils) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.fbLogin = fbLogin;
         this.recaptcha = recaptcha;
-        this.jwtService = jwtService;
-        try {
-            jwtSecret = String.valueOf(SecureRandom.getInstanceStrong().nextLong());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        this.jwtUtils = jwtUtils;
+
     }
 
 
@@ -85,7 +75,7 @@ public class UserController {
     @PutMapping("/mailuser")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
-     //   if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
+        if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
 
         try {
             UserMail user = userService.getUserMail(params.get("email").toString());
@@ -131,10 +121,9 @@ public class UserController {
 
         String jwtToken = authorization.replace("Bearer ", "");
 
-        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
 
-
-        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()), UUID.fromString( jwtService.getPayload(jwtToken, jwtSecret).getString("iduser") ));
+        userService.addFavoriteStation(Integer.parseInt(params.get("id_station").toString()),
+                UUID.fromString( jwtUtils.getPayload(jwtToken).getString("iduser") ));
 
         return true;
     }
@@ -144,10 +133,8 @@ public class UserController {
 
         String jwtToken = authorization.replace("Bearer ", "");
 
-        if (!jwtService.isValid(jwtToken, jwtSecret)) throw new RuntimeException();
-
-
-        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()), UUID.fromString( jwtService.getPayload(jwtToken, jwtSecret).getString("iduser") ));
+        userService.removeFavoriteStation(Integer.parseInt(params.get("id_station").toString()),
+                UUID.fromString( jwtUtils.getPayload(jwtToken).getString("iduser") ));
 
         return true;
     }
@@ -171,7 +158,7 @@ public class UserController {
         payload.put("favoriteStations", favoriteStations);
 
         try {
-            response.put("JWT", jwtService.generateJWT(payload, jwtSecret));
+            response.put("JWT", jwtUtils.generateJwtToken(payload));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
