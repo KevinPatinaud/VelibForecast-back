@@ -12,7 +12,6 @@ public class WebApplication {
 
         SpringApplication app = new SpringApplication(WebApplication.class);
 
-
         app.run(args);
 
     }
