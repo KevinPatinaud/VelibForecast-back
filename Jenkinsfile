@@ -8,6 +8,13 @@ pipeline {
       }
     }
 
+    stage('test') {
+      steps {
+        sh 'chmod +x -R ./'
+        sh 'mvn clean verify -P integration-test'
+      }
+    }
+
     stage('build') {
       steps {
         sh 'chmod +x -R ./'
