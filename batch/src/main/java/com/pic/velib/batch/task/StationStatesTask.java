@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class StationStatesTask {
 
     @Value("${stationState.deepHistoryToKeepInDays}")
-    private int deepHistoryToKeepInDays;
+    private long deepHistoryToKeepInDays;
 
     private final StationService stationService;
 
