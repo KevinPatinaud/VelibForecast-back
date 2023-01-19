@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -30,21 +31,9 @@ public class StationServiceImpl implements StationService {
         this.entityManager = entityManager;
     }
 
-    @Override
-    public List<StationState> findStationStates() {
-        Iterable<StationState> iterable = stationStateRepository.findAll();
 
 
-        List<StationState> result = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
 
-        return result;
-    }
-
-    @Override
-    public List<StationState> findStationStates(long stationCode) {
-        return null; //stationStateRepository.findByStationCodeOrderByTimeStampInformationGotDesc(stationCode);
-
-    }
 
     @Override
     public StationState findLastStationStates(long stationCode) {
@@ -60,9 +49,27 @@ public class StationServiceImpl implements StationService {
 
     }
 
+
     @Override
-    public void saveStation(Station station) {
-        stationRepository.save(station);
+    public List<StationState>  findStationStatesBefore(long timestamp) {
+
+        Iterable<StationState> iterable = stationStateRepository.findByTimestampInformationGotLessThan(timestamp);
+       return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+
+    }
+
+
+
+    @Override
+    @Transactional
+    public void  deleteStationStatesBefore(long timestamp) {
+
+        try {
+         entityManager.createNativeQuery("delete FROM StationState WHERE timestamp_information_got < :before", StationState.class).setParameter("before", timestamp).executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -70,18 +77,6 @@ public class StationServiceImpl implements StationService {
         stationRepository.saveAll(stations);
     }
 
-    @Override
-    public void saveStationState(StationState stationState) {
-        Station station = stationRepository.findById(stationState.getStation().getStationCode()).orElse(null);
-        stationState.setStation(station);
-
-        stationStateRepository.save(stationState);
-    }
-
-    @Override
-    public void deleteAllStationStates() {
-        stationStateRepository.deleteAll();
-    }
 
     @Override
     public void updateStationState(StationState stationState) {
@@ -115,7 +110,7 @@ public class StationServiceImpl implements StationService {
         // !!!!!!!!!!!!!!!!!!!!!!!! the AI is currently in development !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         StationState state = findLastStationStates(stationCode);
 
-        jsonState.put("numBikesAvailable", Math.min( station.getCapacity() , state.getNumBikesAvailable() +  inMinutes / 60));
+        jsonState.put("numBikesAvailable", Math.min(station.getCapacity(), state.getNumBikesAvailable() + inMinutes / 60));
         jsonState.put("numDockAvailable", Math.max(0, station.getCapacity() - (state.getNumBikesAvailable() + inMinutes / 60)));
 
         // !!!!!!!!!!!!!!!!!!!!!!!! the AI is currently in development !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -6,6 +6,7 @@ import com.pic.velib.entity.StationState;
 import com.pic.velib.service.opendata.StationsAPI;
 import com.pic.velib.service.opendata.StationsAPIImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class StationStatesTask {
+
+    @Value("${stationState.deepHistoryToKeepInDays}")
+    private int deepHistoryToKeepInDays;
 
     private final StationService stationService;
 
@@ -37,6 +41,14 @@ public class StationStatesTask {
         {
             stationService.updateStationState(stationStates.get(i));
         }
+
+    }
+
+
+    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.DAYS)
+    public void dropHistory() {
+
+        stationService.deleteStationStatesBefore(System.currentTimeMillis() - deepHistoryToKeepInDays * 24 * 60 * 60 * 1000);
 
     }
 
