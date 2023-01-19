@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class StationStatesTask {
 
     @Value("${stationState.deepHistoryToKeepInDays}")
-    private int deepHistoryToKeepInDays;
+    private long deepHistoryToKeepInDays;
 
     private final StationService stationService;
 
@@ -29,7 +29,7 @@ public class StationStatesTask {
         this.stationsApi = stationsApi;
     }
 
-    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
     public void getStations() {
 
         List<Station> stations = stationsApi.getStations();
