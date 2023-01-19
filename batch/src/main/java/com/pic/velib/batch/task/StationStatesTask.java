@@ -29,7 +29,7 @@ public class StationStatesTask {
         this.stationsApi = stationsApi;
     }
 
-    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
     public void getStations() {
 
         List<Station> stations = stationsApi.getStations();
