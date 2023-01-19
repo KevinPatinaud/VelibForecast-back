@@ -10,22 +10,17 @@ import java.util.List;
 public interface StationService {
 
 
-    public List<StationState> findStationStates();
+    StationState findLastStationStates(long stationCode);
 
-    public List<StationState> findStationStates(long stationCode);
-
-
-    public StationState findLastStationStates(long stationCode);
+    void deleteStationStatesBefore(long timestamp);
 
     void saveAllStation(List<Station> stations);
 
-    public void saveStationState(StationState stationState);
 
-    public void saveStation(Station station);
+    List<StationState> findStationStatesBefore(long timestamp);
 
-    public void deleteAllStationStates();
 
-    public void updateStationState(StationState stationState);
+    void updateStationState(StationState stationState);
 
-    public JSONObject getStationState(long stationCode, int inMinutes) throws Exception;
+    JSONObject getStationState(long stationCode, int inMinutes) throws Exception;
 }
