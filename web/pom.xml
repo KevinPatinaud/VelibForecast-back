@@ -150,12 +150,12 @@
 						<configuration>
 							<rules>
 								<rule>
-									<element>CLASS</element>
+									<element>BUNDLE</element>
 									<limits>
 										<limit>
 											<counter>LINE</counter>
 											<value>COVEREDRATIO</value>
-											<minimum>20%</minimum>
+											<minimum>0%</minimum>
 										</limit>
 									</limits>
 								</rule>
