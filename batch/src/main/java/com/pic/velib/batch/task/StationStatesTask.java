@@ -29,7 +29,7 @@ public class StationStatesTask {
         this.stationsApi = stationsApi;
     }
 
-    @Scheduled(fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(cron = "*/5 * * * * ?")
     public void getStations() {
 
         List<Station> stations = stationsApi.getStations();
@@ -45,7 +45,7 @@ public class StationStatesTask {
     }
 
 
-    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.DAYS)
+    @Scheduled(cron = "0 0 */1 * * ?")
     public void dropHistory() {
 
         stationService.deleteStationStatesBefore(System.currentTimeMillis() - deepHistoryToKeepInDays * 24 * 60 * 60 * 1000);
