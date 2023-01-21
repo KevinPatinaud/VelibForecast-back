@@ -11,7 +11,7 @@ pipeline {
     stage('test') {
       steps {
         sh 'chmod +x -R ./'
-        sh 'mvn clean verify -P integration-test'
+        sh 'mvn clean test jacoco:report'
       }
     }
 

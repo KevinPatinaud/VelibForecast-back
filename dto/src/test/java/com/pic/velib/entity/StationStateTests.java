@@ -1,4 +1,4 @@
-package com.pic.velib.service.api;
+package com.pic.velib.entity;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,12 +8,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(SpringRunner.class)
 @ContextConfiguration(loader= AnnotationConfigContextLoader.class)
 @ActiveProfiles("test")
-public class ApiTests {
+public class StationStateTests {
 
     @Configuration
     static class ContextConfiguration {
@@ -21,8 +19,16 @@ public class ApiTests {
     }
 
     @Test
-    public void sampleTest()
+    public void isEqual()
     {
-        assertThat(true);
+        Station station = new Station();
+
+        StationState stationState = new StationState();
+        stationState.setStation(station);
+
+        StationState copy = stationState;
+
+      assert(  stationState.isEqual(copy) );
     }
+
 }
