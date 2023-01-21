@@ -1,4 +1,4 @@
-package com.pic.velib.service.dto.impl;
+package com.pic.velib.service.dto;
 
 import com.pic.velib.entity.Station;
 import com.pic.velib.repository.StationRepository;

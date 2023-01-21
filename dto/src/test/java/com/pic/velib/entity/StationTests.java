@@ -1,18 +1,25 @@
 package com.pic.velib.entity;
 
-import com.pic.velib.repository.StationRepository;
+
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-public class StationTest {
+@ContextConfiguration(loader=AnnotationConfigContextLoader.class)
+@ActiveProfiles("test")
+public class StationTests {
 
+    @Configuration
+    static class ContextConfiguration {
+
+    }
 
     @Test
     public void toJSON() {
