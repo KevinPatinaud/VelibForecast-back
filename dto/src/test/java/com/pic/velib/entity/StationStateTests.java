@@ -18,13 +18,28 @@ public class StationStateTests {
 
     }
 
-    @Test
-    public void isEqual()
+    public StationState generateNewStationState()
     {
         Station station = new Station();
-
         StationState stationState = new StationState();
         stationState.setStation(station);
+        stationState.setLastReported(123456789);
+        stationState.setIsRenting(true);
+        stationState.setIsInstalled(true);
+        stationState.setIsReturning(true);
+        stationState.setNumDocksAvailable(28);
+        stationState.setNumBikesAvailable(12);
+        stationState.setNumBikesAvailableTypesEbike(8);
+        stationState.setNumBikesAvailableTypesMechanical(4);
+        stationState.setTimestampInformationGot(123456798);
+
+        return stationState;
+    }
+
+    @Test
+    public void isEqualTest()
+    {
+        StationState stationState = generateNewStationState();
 
         StationState copy = stationState;
 
