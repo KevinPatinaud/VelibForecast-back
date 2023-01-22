@@ -17,7 +17,6 @@ import java.util.stream.StreamSupport;
 @Service
 public class StationServiceImpl implements StationService {
 
-
     private final StationStateRepository stationStateRepository;
     private final StationRepository stationRepository;
 
