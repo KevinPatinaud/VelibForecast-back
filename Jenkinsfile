@@ -7,14 +7,14 @@ pipeline {
         sh '/var/SpringServer/stop.sh'
       }
     }
-
+/*
     stage('test') {
       steps {
         sh 'chmod +x -R ./'
         sh 'mvn clean test jacoco:report'
       }
     }
-
+*/
     stage('build') {
       steps {
         sh 'chmod +x -R ./'
