@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableJpaRepositories("com.pic.velib.repository")
-@ComponentScan(basePackages = {"com.pic.velib.service.dto", "com.pic.velib.service.facebook", "com.pic.velib.service.recaptcha", "com.pic.velib.service.authentication" , "com.pic.velib.service.opendata"})
+@ComponentScan(basePackages = {"com.pic.velib.service.dto", "com.pic.velib.service.facebook", "com.pic.velib.service.recaptcha" , "com.pic.velib.service.opendata"})
 @EntityScan(basePackages = {"com.pic.velib.entity"})
 public class AppConfig {
 
