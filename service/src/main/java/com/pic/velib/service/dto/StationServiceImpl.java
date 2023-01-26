@@ -32,9 +32,6 @@ public class StationServiceImpl implements StationService {
     }
 
 
-
-
-
     @Override
     public StationState findLastStationStates(long stationCode) {
 
@@ -51,21 +48,20 @@ public class StationServiceImpl implements StationService {
 
 
     @Override
-    public List<StationState>  findStationStatesBefore(long timestamp) {
+    public List<StationState> findStationStatesBefore(long timestamp) {
 
         Iterable<StationState> iterable = stationStateRepository.findByTimestampInformationGotLessThan(timestamp);
-       return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
 
     }
 
 
-
     @Override
     @Transactional
-    public void  deleteStationStatesBefore(long timestamp) {
+    public void deleteStationStatesBefore(long timestamp) {
 
         try {
-         entityManager.createNativeQuery("delete FROM StationState WHERE timestamp_information_got < :before", StationState.class).setParameter("before", timestamp).executeUpdate();
+            entityManager.createNativeQuery("delete FROM StationState WHERE timestamp_information_got < :before", StationState.class).setParameter("before", timestamp).executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,6 +81,25 @@ public class StationServiceImpl implements StationService {
 
         if (!stationState.isEqual(lastSavedStationState)) {
             stationStateRepository.save(stationState);
+        }
+    }
+
+    @Override
+    public List<Station> getStations() {
+        Iterable<Station> iterable = stationRepository.findAll();
+        return StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<StationState> getStationStates() {
+
+        try {
+            List<StationState> res = entityManager.createNativeQuery("SELECT * FROM StationState AS a WHERE timestamp_information_got  = (select max(timestamp_information_got) from StationState as b where a.station_code = b.station_code);", StationState.class).getResultList();
+
+            return res.size() > 0 ? res : null;
+        } catch (Exception e) {
+            return null;
         }
     }
 

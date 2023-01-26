@@ -22,5 +22,8 @@ public interface StationService {
 
     void updateStationState(StationState stationState);
 
+    List<Station> getStations();
+    List<StationState> getStationStates();
+
     JSONObject getStationState(long stationCode, int inMinutes) throws Exception;
 }
