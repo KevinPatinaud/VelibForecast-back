@@ -32,13 +32,13 @@ public class VelibController {
 
     @GetMapping("/")
     public List<Station> stations() {
-        return stationService.getStations();
+        return stationsApi.getStations();
     }
 
     @GetMapping("/states")
     public List<StationState> stationStates() {
 
-        return stationService.getStationStates();
+        return stationsApi.getCurrentStates();
     }
 
 
