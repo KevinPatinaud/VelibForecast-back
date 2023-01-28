@@ -75,7 +75,7 @@ public class UserController {
     @PutMapping("/mailuser")
     public String connectMailUser(@RequestBody Map<String, Object> params) {
 
-        if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
+   //     if (!recaptcha.isValide(params.get("captchaToken").toString())) return null;
 
         try {
             UserMail user = userService.getUserMail(params.get("email").toString());
